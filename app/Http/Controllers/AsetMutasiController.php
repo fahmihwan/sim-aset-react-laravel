@@ -9,6 +9,7 @@ use App\Models\Detail_aset_mutasi;
 use App\Models\Ruangan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 use function Termwind\render;
@@ -73,7 +74,6 @@ class AsetMutasiController extends Controller
      */
     public function show(Aset_mutasi $aset_mutasi)
     {
-
         $detail_asset = Detail_aset_mutasi::with([
             'detail_aset:id,kode_detail_aset,aset_id',
             'detail_aset.aset:id,nama',
@@ -88,7 +88,6 @@ class AsetMutasiController extends Controller
             'aset_mutasi' => $aset_mutasi,
             'ruangans' => Ruangan::latest()->get(),
             'detail_aset_mutasi' => $detail_asset,
-            'detail_aset_id' => Detail_aset::with('aset')->latest()->get()
         ]);
     }
 
@@ -112,7 +111,47 @@ class AsetMutasiController extends Controller
      */
     public function update(Request $request, Aset_mutasi $aset_mutasi)
     {
-        //
+        // update verfikasi
+        Aset_mutasi::where('id', $aset_mutasi->id)->update([
+            'verifikasi' => $request->verifikasi
+        ]);
+
+        try {
+            DB::beginTransaction();
+            // update verify
+            Aset_mutasi::where('id', $aset_mutasi->id)->update([
+                'verifikasi' => $request->verifikasi
+            ]);
+
+            // list detail aset_mutasi
+            $detail_asset_mutasi = Detail_aset_mutasi::select([
+                'detail_aset_id',
+                'asal_ruangan_id',
+                'tujuan_ruangan_id'
+            ])
+                ->where('aset_mutasi_id', $aset_mutasi->id)
+                ->get();
+
+            foreach ($detail_asset_mutasi as $d) {
+                // update detail aset
+                if ($request->verifikasi) {
+                    Detail_aset::where('id', $d->detail_aset_id)->update([
+                        'ruangan_id' => $d->tujuan_ruangan_id
+                    ]);
+                } else {
+                    Detail_aset::where('id', $d->detail_aset_id)->update([
+                        'ruangan_id' => $d->asal_ruangan_id
+                    ]);
+                }
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            dd($th->getMessage());
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -123,7 +162,8 @@ class AsetMutasiController extends Controller
      */
     public function destroy(Aset_mutasi $aset_mutasi)
     {
-        //
+        Aset_mutasi::destroy($aset_mutasi->id);
+        return redirect()->back();
     }
 
     function get_detail_aset($id)

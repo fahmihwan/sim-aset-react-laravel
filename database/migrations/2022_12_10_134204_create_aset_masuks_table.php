@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('keterangan');
             $table->boolean('verifikasi');
             $table->date('tanggal_masuk');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

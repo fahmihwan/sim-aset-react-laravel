@@ -8,38 +8,33 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import DangerButton from "@/Components/DangerButton";
 import { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
-import { Alert } from "@/Components/Alert";
 
 export default function Create(props) {
-    const { aset_mutasi, ruangans, detail_aset_mutasi, flash } =
+    const { aset_penghapusan, ruangans, detail_aset_penghapusans } =
         usePage().props;
 
-    console.log(flash);
-    const [enabled, setEnabled] = useState(aset_mutasi.verifikasi);
+    const [enabled, setEnabled] = useState(aset_penghapusan.verifikasi);
+    const [cariRuangan, setCariRuangan] = useState(null);
     const [detailAset, setDetailAset] = useState([]);
     const [kode, setKode] = useState({
         kode: "",
     });
 
-    const { data, setData, post, processing, errors, destroy, reset } = useForm(
-        {
-            asal_ruangan_id: "",
-            aset_mutasi_id: aset_mutasi.id,
-            detail_aset_id: "",
-            kondisi: "",
-        }
-    );
-    console.log(data);
+    const { data, setData, post } = useForm({
+        aset_penghapusan_id: aset_penghapusan.id,
+        detail_aset_id: "",
+        kondisi: "",
+    });
 
     useEffect(() => {
-        if (data.asal_ruangan_id != false) {
-            fetch(`/get_detail_aset/aset_mutasi/${data.asal_ruangan_id}`)
+        if (cariRuangan != null) {
+            fetch(`/get_detail_aset/aset_mutasi/${cariRuangan}`)
                 .then((res) => res.json())
                 .then((res) => {
                     setDetailAset(res);
                 });
         }
-    }, [data.asal_ruangan_id]);
+    }, [cariRuangan]);
 
     const handleChooseKode = (id, kode) => {
         setData("detail_aset_id", id);
@@ -47,38 +42,27 @@ export default function Create(props) {
             kode: kode,
         });
     };
+    const handleDelete = (id) => {
+        confirm("apakah anda yakin ingin menghapus?") &&
+            Inertia.delete(`/detail_aset_penghapusan/${id}`);
+    };
 
-    const onHandleChange = (e) => {
-        setData(e.target.name, e.target.value);
-        if (e.target.name == "asal_ruangan_id") {
-            setKode({
-                kode: "",
-                ruangan: "",
-            });
-        }
+    const verifyData = () => {
+        const bol = aset_penghapusan.verifikasi ? 0 : 1;
+        Inertia.put(`/aset_penghapusan/${aset_penghapusan.id}`, {
+            verifikasi: bol,
+        });
+        setEnabled(bol);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/detail_aset_mutasi");
+        post("/detail_aset_penghapusan");
         setKode({
             kode: "",
         });
         setData("detail_aset_id", "");
         setData("kondisi", "");
-    };
-
-    const handleDelete = (id) => {
-        confirm("apakah anda yakin ingin menghapus?") &&
-            Inertia.delete(`/detail_aset_mutasi/${id}`);
-    };
-
-    const verifyData = () => {
-        const bol = aset_mutasi.verifikasi ? 0 : 1;
-        Inertia.put(`/aset_mutasi/${aset_mutasi.id}`, {
-            verifikasi: bol,
-        });
-        setEnabled(bol);
     };
 
     return (
@@ -87,20 +71,14 @@ export default function Create(props) {
             errors={props.errors}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Tambah Aset Mutasi
+                    Tambah Aset Penghapusan
                 </h2>
             }
         >
             <Head title="Tambah Ruangan " />
-            <div className="pt-5 px-8 flex justify-between">
-                {flash.type == "fail" ? (
-                    <Alert type={flash.type} message={flash.message} />
-                ) : (
-                    <div></div>
-                )}
-
+            <div className="pt-5 px-8 flex justify-end">
                 <Link
-                    href={route("aset_mutasi.index")}
+                    href={route("aset_penghapusan.index")}
                     className="btn btn-sm bg-neutral "
                 >
                     Kembali
@@ -111,9 +89,9 @@ export default function Create(props) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 md:flex">
                     {/* FORM */}
                     {enabled != true && (
-                        <FormAsetMutasi
+                        <FormAsetPenghapusan
                             handleSubmit={handleSubmit}
-                            onHandleChange={onHandleChange}
+                            setCariRuangan={setCariRuangan}
                             ruangans={ruangans}
                             props={props}
                             kode={kode}
@@ -133,7 +111,9 @@ export default function Create(props) {
                             <div className="p-5 flex">
                                 <div className="w-11/12">
                                     {/* Tabel keterangan */}
-                                    <KeteranganEl asetMutasi={aset_mutasi} />
+                                    <KeteranganEl
+                                        asetPenghapusan={aset_penghapusan}
+                                    />
                                 </div>
                                 {/* is Verify */}
                                 <div className=" w-1/12">
@@ -168,10 +148,12 @@ export default function Create(props) {
 
                         {/* data detail aset yang di masukan */}
                         <div className="bg-white mt-3 p-3">
-                            <p>Detail Aset Mutasi</p>
+                            <p>List aset yang akan dihapus</p>
                             <div className="overflow-x-auto">
                                 <TabelDetailAset
-                                    detailAsetMutasi={detail_aset_mutasi}
+                                    detailAsetPenghapusan={
+                                        detail_aset_penghapusans
+                                    }
                                     funcHandleDelete={handleDelete}
                                     enabled={enabled}
                                 />
@@ -184,9 +166,9 @@ export default function Create(props) {
     );
 }
 
-const FormAsetMutasi = ({
+const FormAsetPenghapusan = ({
     handleSubmit,
-    onHandleChange,
+    setCariRuangan,
     ruangans,
     props,
     kode,
@@ -198,20 +180,19 @@ const FormAsetMutasi = ({
     return (
         <div className="bg-white w-full md:w-2/6 shadow-sm sm:rounded-lg m-2">
             <div className="p-5">
-                <h1 className="text-2xl mb-3">Form Aset Mutasi</h1>
+                <h1 className="text-2xl mb-3">Form Aset Penghapusan</h1>
                 <form onSubmit={handleSubmit}>
-                    {/* ASAL RUANGAN */}
+                    {/* CARI RUANGAN */}
                     <div className="mb-3">
                         <InputLabel
-                            forInput="asal_ruangan_id"
-                            value="Asal Ruangan"
+                            forInput="cari_ruangan"
+                            value="Cari Ruangan"
                         />
                         <select
                             className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
                             defaultValue={"DEFAULT"}
-                            name="asal_ruangan_id"
-                            id="asal_ruangan_id"
-                            onChange={onHandleChange}
+                            id="cari_ruangan"
+                            onChange={(e) => setCariRuangan(e.target.value)}
                         >
                             <option value={"DEFAULT"} disabled>
                                 pilih ruangan
@@ -231,22 +212,22 @@ const FormAsetMutasi = ({
                     </div>
 
                     {/* KODE DETAIL ASET*/}
-                    <div className="mb-3">
+                    <div className="mb-3 ">
                         <InputLabel
                             forInput="kode_detail_aset"
                             value="Kode detail aset"
                         />
-                        <div className="flex w-full">
+                        <div className="flex w-full  ">
                             <TextInput
                                 id="kode_detail_aset"
                                 type="text"
                                 value={kode.kode}
-                                className="block w-full lg:w-72 h-full rounded-r-none bg-gray-100"
+                                className=" w-72 h-full rounded-r-none bg-gray-100"
                                 readonly={true}
                             />
                             <label
                                 htmlFor="my-modal-5"
-                                className="btn rounded-l-none w-20"
+                                className="btn rounded-l-none border "
                             >
                                 Cari
                             </label>
@@ -256,41 +237,12 @@ const FormAsetMutasi = ({
                             className="mt-2"
                         />
                     </div>
+
                     {/* MODAL */}
                     <div className="mb-3">
                         <ModalData
                             detailAset={detailAset ? detailAset : 0}
                             funcChoose={handleChooseKode}
-                        />
-                    </div>
-
-                    {/* TUJUAN RUANGAN  */}
-                    <div className="mb-3">
-                        <InputLabel
-                            forInput="tujuan_ruangan_id"
-                            value="Tujuan Ruangan"
-                        />
-                        <select
-                            className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                            defaultValue={"DEFAULT"}
-                            name="tujuan_ruangan_id"
-                            id="tujuan_ruangan_id"
-                            onChange={onHandleChange}
-                        >
-                            <option value={"DEFAULT"} disabled>
-                                pilih tujuan ruangan
-                            </option>
-                            {ruangans.map((data, i) => {
-                                return (
-                                    <option key={i} value={data.id}>
-                                        {data.ruangan}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                        <InputError
-                            message={props.errors.tujuan_ruangan_id}
-                            className="mt-2"
                         />
                     </div>
 
@@ -315,7 +267,11 @@ const FormAsetMutasi = ({
     );
 };
 
-const TabelDetailAset = ({ detailAsetMutasi, funcHandleDelete, enabled }) => {
+const TabelDetailAset = ({
+    detailAsetPenghapusan,
+    funcHandleDelete,
+    enabled,
+}) => {
     return (
         <table className="table w-full">
             <thead>
@@ -324,20 +280,18 @@ const TabelDetailAset = ({ detailAsetMutasi, funcHandleDelete, enabled }) => {
                     <th>kode detail aset</th>
                     <th>aset</th>
                     <th>asal ruangan</th>
-                    <th>tujuan ruangan</th>
                     <th>kondisi</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {detailAsetMutasi.map((data, i) => {
+                {detailAsetPenghapusan.map((data, i) => {
                     return (
                         <tr key={i}>
                             <th>{i + 1}</th>
                             <td>{data.detail_aset.kode_detail_aset}</td>
                             <td>{data.detail_aset.aset.nama}</td>
-                            <td>{data.asal_ruangan.ruangan}</td>
-                            <td>{data.tujuan_ruangan.ruangan}</td>
+                            <td>{data.detail_aset.ruangan.ruangan}</td>
                             <td>{data.kondisi}</td>
                             {enabled ? (
                                 <td className="text-success text-2xl text-center">
@@ -362,24 +316,24 @@ const TabelDetailAset = ({ detailAsetMutasi, funcHandleDelete, enabled }) => {
     );
 };
 
-const KeteranganEl = ({ asetMutasi }) => {
+const KeteranganEl = ({ asetPenghapusan }) => {
     return (
         <>
             <table>
                 <tbody>
                     <tr>
-                        <td>Kode</td>
-                        <td> : {asetMutasi.kode_mutasi}</td>
+                        <td>Kode Penghapusan</td>
+                        <td> : {asetPenghapusan.kode_penghapusan}</td>
                     </tr>
                     <tr>
-                        <td className="pr-3">Tanggal Aset Masuk</td>
-                        <td>: {asetMutasi.tanggal_mutasi}</td>
+                        <td className="pr-3">Tanggal Aset Penghapusan</td>
+                        <td>: {asetPenghapusan.tanggal_penghapusan}</td>
                     </tr>
                     <tr>
                         <td>verifikasi</td>
                         <td>
                             :{" "}
-                            {asetMutasi.verifikasi ? (
+                            {asetPenghapusan.verifikasi ? (
                                 <span className="text-success font-bold">
                                     sudah
                                 </span>
@@ -392,51 +346,11 @@ const KeteranganEl = ({ asetMutasi }) => {
                     </tr>
                     <tr>
                         <td>Keterangan</td>
-                        <td> : {asetMutasi.keterangan}</td>
+                        <td> : {asetPenghapusan.keterangan}</td>
                     </tr>
                 </tbody>
             </table>
         </>
-    );
-};
-
-const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
-    return (
-        <div>
-            <label className="cursor-pointer mr-3 ">
-                <input
-                    type="radio"
-                    name="kodisi"
-                    className="radio checked:bg-blue-500 mr-1"
-                    onChange={funcHandleChange}
-                    checked={dataKondisi == "bagus"}
-                    value="bagus"
-                />
-                <span className="label-text">Bagus</span>
-            </label>
-            <label className="cursor-pointer mr-3 ">
-                <input
-                    type="radio"
-                    name="kodisi"
-                    className="radio checked:bg-blue-500 mr-1"
-                    onChange={funcHandleChange}
-                    checked={dataKondisi == "layak"}
-                    value="layak"
-                />
-                <span className="label-text">Layak</span>
-            </label>
-            <label className="cursor-pointer  ">
-                <input
-                    type="radio"
-                    name="kodisi"
-                    className="radio checked:bg-blue-500 mr-1"
-                    onChange={funcHandleChange}
-                    checked={dataKondisi == "buruk"}
-                    value="buruk"
-                />
-                <span className="label-text">Buruk</span>
-            </label>
-        </div>
     );
 };
 
@@ -447,7 +361,9 @@ const ModalData = ({ detailAset, funcChoose }) => {
         if (search == "") {
             return data;
         } else if (
-            data.kode_detail_aset.toLowerCase().includes(search.toLowerCase())
+            data.kode_detail_aset
+                .toLowerCase()
+                .includes(search.toLocaleLowerCase())
         ) {
             return data;
         }
@@ -470,9 +386,8 @@ const ModalData = ({ detailAset, funcChoose }) => {
                         type="text"
                         className="h-full mb-3  "
                         isFocused={true}
-                        value={search}
-                        handleChange={(e) => setSearch(e.target.value)}
                         autoComplete="off"
+                        handleChange={(e) => setSearch(e.target.value)}
                         placeholder="cari kode"
                     />
                     <div className="overflow-scroll h-96">
@@ -526,5 +441,45 @@ const ModalData = ({ detailAset, funcChoose }) => {
                 </div>
             </div>
         </>
+    );
+};
+
+const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
+    return (
+        <div>
+            <label className="cursor-pointer mr-3 ">
+                <input
+                    type="radio"
+                    name="kodisi"
+                    className="radio checked:bg-blue-500 mr-1"
+                    onChange={funcHandleChange}
+                    checked={dataKondisi == "bagus"}
+                    value="bagus"
+                />
+                <span className="label-text">Bagus</span>
+            </label>
+            <label className="cursor-pointer mr-3 ">
+                <input
+                    type="radio"
+                    name="kodisi"
+                    className="radio checked:bg-blue-500 mr-1"
+                    onChange={funcHandleChange}
+                    checked={dataKondisi == "layak"}
+                    value="layak"
+                />
+                <span className="label-text">Layak</span>
+            </label>
+            <label className="cursor-pointer  ">
+                <input
+                    type="radio"
+                    name="kodisi"
+                    className="radio checked:bg-blue-500 mr-1"
+                    onChange={funcHandleChange}
+                    checked={dataKondisi == "buruk"}
+                    value="buruk"
+                />
+                <span className="label-text">Buruk</span>
+            </label>
+        </div>
     );
 };

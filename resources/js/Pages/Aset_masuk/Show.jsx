@@ -6,11 +6,12 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import DangerButton from "@/Components/DangerButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
+import { Alert } from "@/Components/Alert";
 
 export default function Create(props) {
-    const { aset_id, ruangan_id, aset_masuk, detail_aset_masuk } =
+    const { aset_id, ruangan_id, aset_masuk, detail_aset_masuk, flash } =
         usePage().props;
 
     const [enabled, setEnabled] = useState(aset_masuk.verifikasi);
@@ -56,8 +57,14 @@ export default function Create(props) {
                 </h2>
             }
         >
-            <Head title="Tambah Ruangan " />
-            <div className="pt-5 px-8 flex justify-end">
+            <Head title="Tambah Ruangan" />
+            <div className="pt-5 px-8 flex justify-between">
+                {flash.type == "fail" ? (
+                    <Alert type={flash.type} message={flash.message} />
+                ) : (
+                    <div></div>
+                )}
+
                 <Link
                     href={route("aset_masuk.index")}
                     className="btn btn-sm bg-neutral "
@@ -68,99 +75,24 @@ export default function Create(props) {
 
             <div className="py-5">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 md:flex">
-                    {/* FORM */}
-                    <div className="bg-white w-full md:w-2/6 shadow-sm sm:rounded-lg m-2">
-                        <div className="p-5">
-                            <h1 className="text-2xl mb-3">Form Aset Masuk</h1>
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <InputLabel
-                                        forInput="kode_detail_aset"
-                                        value="kode detail aset"
-                                    />
-                                    <TextInput
-                                        id="kode_detail_aset"
-                                        type="text"
-                                        name="kode_detail_aset"
-                                        value={data.kode_detail_aset}
-                                        handleChange={onHandleChange}
-                                        className="mt-1 block w-full"
-                                        isFocused={true}
-                                    />
-                                    <InputError
-                                        message={props.errors.kode_detail_aset}
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <InputLabel
-                                        forInput="aset_id"
-                                        value="Data Aset"
-                                    />
-                                    <select
-                                        className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                                        defaultValue={"DEFAULT"}
-                                        name="aset_id"
-                                        id="aset_id"
-                                        onChange={onHandleChange}
-                                    >
-                                        <option value={"DEFAULT"} disabled>
-                                            pilih aset
-                                        </option>
-                                        {aset_id.map((data, i) => {
-                                            return (
-                                                <option key={i} value={data.id}>
-                                                    {data.nama}
-                                                </option>
-                                            );
-                                        })}
-                                    </select>
-                                    <InputError
-                                        message={props.errors.aset_id}
-                                        className="mt-2"
-                                    />
-                                </div>
+                    {/* SINI */}
+                    {enabled != true && (
+                        <FormAsetMasuk
+                            handleSubmit={handleSubmit}
+                            data={data}
+                            onHandleChange={onHandleChange}
+                            props={props}
+                            aset_id={aset_id}
+                            ruangan_id={ruangan_id}
+                            processing={processing}
+                        />
+                    )}
 
-                                <div className="mb-3">
-                                    <InputLabel
-                                        forInput="ruangan_id"
-                                        value="Data Ruangan"
-                                    />
-                                    <select
-                                        className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                                        defaultValue={"DEFAULT"}
-                                        name="ruangan_id"
-                                        id="ruangan_id"
-                                        onChange={onHandleChange}
-                                    >
-                                        <option value={"DEFAULT"} disabled>
-                                            pilih ruangan
-                                        </option>
-                                        {ruangan_id.map((data, i) => {
-                                            return (
-                                                <option key={i} value={data.id}>
-                                                    {data.ruangan}
-                                                </option>
-                                            );
-                                        })}
-                                    </select>
-                                    <InputError
-                                        message={props.errors.ruangan_id}
-                                        className="mt-2"
-                                    />
-                                </div>
-
-                                <PrimaryButton
-                                    type="submit"
-                                    disabled={processing}
-                                >
-                                    Submit
-                                </PrimaryButton>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div className="w-full md:w-4/6 m-2">
+                    <div
+                        className={`w-full  ${
+                            enabled != true ? "md:w-4/6" : "md:w-full"
+                        }  m-2`}
+                    >
                         <div className="bg-white">
                             <div className="p-5 flex">
                                 <div className="w-11/12">
@@ -240,7 +172,7 @@ export default function Create(props) {
 
                         {/* data detail aset yang di masukan */}
                         <div className="bg-white mt-3 p-3">
-                            <p>Aset Masuk</p>
+                            <p>Detail Aset Masuk</p>
                             <div className="overflow-x-auto">
                                 <table className="table w-full">
                                     <thead>
@@ -294,3 +226,101 @@ export default function Create(props) {
         </AuthenticatedLayout>
     );
 }
+
+const FormAsetMasuk = ({
+    handleSubmit,
+    data,
+    onHandleChange,
+    props,
+    aset_id,
+    ruangan_id,
+    processing,
+}) => {
+    return (
+        <div className="bg-white w-full md:w-2/6 shadow-sm sm:rounded-lg m-2">
+            <div className="p-5">
+                <h1 className="text-2xl mb-3">Form Aset Masuk</h1>
+
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <InputLabel
+                            forInput="kode_detail_aset"
+                            value="kode detail aset"
+                        />
+                        <TextInput
+                            id="kode_detail_aset"
+                            type="text"
+                            name="kode_detail_aset"
+                            value={data.kode_detail_aset}
+                            handleChange={onHandleChange}
+                            className="mt-1 block w-full"
+                            isFocused={true}
+                        />
+                        <InputError
+                            message={props.errors.kode_detail_aset}
+                            className="mt-2"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputLabel forInput="aset_id" value="Data Aset" />
+                        <select
+                            className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
+                            defaultValue={"DEFAULT"}
+                            name="aset_id"
+                            id="aset_id"
+                            onChange={onHandleChange}
+                        >
+                            <option value={"DEFAULT"} disabled>
+                                pilih aset
+                            </option>
+                            {aset_id.map((data, i) => {
+                                return (
+                                    <option key={i} value={data.id}>
+                                        {data.nama}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                        <InputError
+                            message={props.errors.aset_id}
+                            className="mt-2"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <InputLabel
+                            forInput="ruangan_id"
+                            value="Data Ruangan"
+                        />
+                        <select
+                            className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
+                            defaultValue={"DEFAULT"}
+                            name="ruangan_id"
+                            id="ruangan_id"
+                            onChange={onHandleChange}
+                        >
+                            <option value={"DEFAULT"} disabled>
+                                pilih ruangan
+                            </option>
+                            {ruangan_id.map((data, i) => {
+                                return (
+                                    <option key={i} value={data.id}>
+                                        {data.ruangan}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                        <InputError
+                            message={props.errors.ruangan_id}
+                            className="mt-2"
+                        />
+                    </div>
+
+                    <PrimaryButton type="submit" disabled={processing}>
+                        Submit
+                    </PrimaryButton>
+                </form>
+            </div>
+        </div>
+    );
+};

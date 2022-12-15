@@ -46,6 +46,7 @@ class AsetMasukController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'kode' => 'required',
             'keterangan' => 'required',

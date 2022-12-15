@@ -8,10 +8,7 @@ import { Link } from "@inertiajs/inertia-react";
 const Index = (props) => {
     const { errors } = usePage().props;
 
-    const handleDelete = (id) => {
-        confirm("apakah anda yakin ingin menghapus?") &&
-            Inertia.delete(`/aset/${id}`);
-    };
+    const handleShow = () => {};
 
     return (
         <AuthenticatedLayout
@@ -19,7 +16,7 @@ const Index = (props) => {
             errors={props.errors}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Aset
+                    Aset per-kelas
                 </h2>
             }
         >
@@ -27,7 +24,7 @@ const Index = (props) => {
 
             <div className="pt-5 px-8  flex justify-end">
                 <Link
-                    href={route("aset.create")}
+                    href={route("ruangan.create")}
                     className="btn btn-sm bg-neutral "
                 >
                     Tambah Data
@@ -45,10 +42,7 @@ const Index = (props) => {
                                             No
                                         </th>
                                         <th className="bg-neutral text-white">
-                                            aset
-                                        </th>
-                                        <th className="bg-neutral text-white">
-                                            kategori
+                                            Ruangan
                                         </th>
                                         <th className="bg-neutral text-white">
                                             Created At
@@ -59,40 +53,27 @@ const Index = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.asets.data.map((data, i) => {
+                                    {props.ruangans.data.map((data, i) => {
                                         return (
                                             <tr key={i}>
-                                                <th>{i + props.asets.from}</th>
-                                                <td>{data.nama}</td>
-                                                <td>
-                                                    {data.kategori.kategori}
-                                                </td>
+                                                <th>
+                                                    {i + props.ruangans.from}
+                                                </th>
+                                                <td>{data.ruangan}</td>
                                                 <td>{data.created_at}</td>
                                                 <td>
                                                     <Link
-                                                        href={`/aset/${data.id}/edit`}
-                                                        className="btn btn-sm btn-warning mr-3 "
+                                                        href={`/aset_masuk/${data.id}`}
+                                                        className="btn btn-sm btn-info mr-3 text-white "
                                                     >
-                                                        Edit
+                                                        <i className="fa-regular fa-folder-open"></i>
                                                     </Link>
-                                                    {/* <Link className="btn btn-sm btn-error ">
-                                                        Hapus
-                                                    </Link> */}
-                                                    <DangerButton
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                data.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Hapus
-                                                    </DangerButton>
                                                 </td>
                                             </tr>
                                         );
                                     })}
 
-                                    {props.asets.data.length == 0 && (
+                                    {props.ruangans.data.length == 0 && (
                                         <tr>
                                             <td
                                                 colSpan={4}
@@ -106,9 +87,9 @@ const Index = (props) => {
                             </table>
 
                             <Pagination
-                                totals={props.asets.total}
+                                totals={props.ruangans.total}
                                 className="mt-2"
-                                links={props.asets.links}
+                                links={props.ruangans.links}
                             />
                         </div>
                     </div>

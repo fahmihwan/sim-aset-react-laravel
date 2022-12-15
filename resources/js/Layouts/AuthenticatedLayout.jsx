@@ -30,6 +30,8 @@ export default function Authenticated({ auth, header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+
+                                {/* DATA MASTER */}
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <div className="inline-flex items-center  mb-[-20px] px-1 pt-4 pb-4 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
@@ -39,18 +41,7 @@ export default function Authenticated({ auth, header, children }) {
                                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                                 >
                                                     Data Master
-                                                    <svg
-                                                        className="ml-2 -mr-0.5 h-4 w-4"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                            clipRule="evenodd"
-                                                        />
-                                                    </svg>
+                                                    <ArrowDownSvg />
                                                 </button>
                                             </span>
                                         </div>
@@ -73,11 +64,46 @@ export default function Authenticated({ auth, header, children }) {
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
-                                {/* end change */}
 
-                                <NavLink href={route("detail_aset.index")}>
-                                    Data Asset
-                                </NavLink>
+                                {/* INFORMASI ASET */}
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <div className="inline-flex items-center px-1 mb-[-20px] pt-4 pb-4 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                >
+                                                    Informasi Aset
+                                                    <ArrowDownSvg />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <Dropdown.Link
+                                            href={route(
+                                                "informasi_aset.list_kelas"
+                                            )}
+                                        >
+                                            Aset Kelas
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("informasi_aset.index")}
+                                        >
+                                            Aset Saat ini
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route(
+                                                "informasi_aset.aset_dihapuskan"
+                                            )}
+                                        >
+                                            Aset Dihapuskan
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
+                                </Dropdown>
+
+                                {/* TRANSAKSI */}
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <div className="inline-flex items-center px-1 mb-[-20px] pt-4 pb-4 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
@@ -87,18 +113,7 @@ export default function Authenticated({ auth, header, children }) {
                                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                                 >
                                                     Transaksi
-                                                    <svg
-                                                        className="ml-2 -mr-0.5 h-4 w-4"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                            clipRule="evenodd"
-                                                        />
-                                                    </svg>
+                                                    <ArrowDownSvg />
                                                 </button>
                                             </span>
                                         </div>
@@ -115,19 +130,56 @@ export default function Authenticated({ auth, header, children }) {
                                             Aset Mutasi
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route("aset_masuk.index")}
+                                            href={route(
+                                                "aset_penghapusan.index"
+                                            )}
                                         >
-                                            Aset Dihapus
+                                            Aset Dihapuskan
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
 
-                                <NavLink
+                                {/* LAPORAN */}
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <div className="inline-flex items-center px-1 mb-[-20px] pt-4 pb-4 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                >
+                                                    Laporan
+                                                    <ArrowDownSvg />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <Dropdown.Link
+                                            href={route("laporan.aset_masuk")}
+                                        >
+                                            Aset Masuk
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("laporan.aset_mutasi")}
+                                        >
+                                            Aset Mutasi
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route(
+                                                "laporan.aset_dihapuskan"
+                                            )}
+                                        >
+                                            Aset Dihapuskan
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
+                                </Dropdown>
+                                {/* <NavLink
                                     href={route("dashboard")}
                                     // active={route().current("dashboard")}
                                 >
                                     Laporan
-                                </NavLink>
+                                </NavLink> */}
                             </div>
                         </div>
 
@@ -142,18 +194,7 @@ export default function Authenticated({ auth, header, children }) {
                                             >
                                                 {auth.user.name}
 
-                                                <svg
-                                                    className="ml-2 -mr-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
+                                                <ArrowDownSvg />
                                             </button>
                                         </span>
                                     </Dropdown.Trigger>
@@ -277,3 +318,20 @@ export default function Authenticated({ auth, header, children }) {
         </div>
     );
 }
+
+const ArrowDownSvg = () => {
+    return (
+        <svg
+            className="ml-2 -mr-0.5 h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+        >
+            <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+            />
+        </svg>
+    );
+};

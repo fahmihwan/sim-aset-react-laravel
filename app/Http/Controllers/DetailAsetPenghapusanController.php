@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Aset_masuk;
-use App\Models\Detail_aset;
+use App\Models\Detail_aset_penghapusan;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class DetailAsetController extends Controller
+class DetailAsetPenghapusanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +14,7 @@ class DetailAsetController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Detail_aset/Index', [
-            'detail_aset' => Aset_masuk::paginate(5)
-        ]);
+        //
     }
 
     /**
@@ -40,38 +36,32 @@ class DetailAsetController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kode_detail_aset' => 'required|unique:detail_asets',
-            'aset_id' => 'required',
-            'ruangan_id' => 'required',
-            'aset_masuk_id' => 'required',
+            'aset_penghapusan_id' => 'required',
+            'detail_aset_id' => 'required',
+            'kondisi' => 'required',
         ]);
 
-        Detail_aset::create($validated);
-
-        return redirect()->back()->with([
-            'type' => 'fail',
-            'message' => 'User has been updated'
-        ]);
+        Detail_aset_penghapusan::create($validated);
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Detail_aset  $detail_aset
+     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
      * @return \Illuminate\Http\Response
      */
-    public function show(Detail_aset $detail_aset)
+    public function show(Detail_aset_penghapusan $detail_aset_penghapusan)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Detail_aset  $detail_aset
+     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Detail_aset $detail_aset)
+    public function edit(Detail_aset_penghapusan $detail_aset_penghapusan)
     {
         //
     }
@@ -80,10 +70,10 @@ class DetailAsetController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Detail_aset  $detail_aset
+     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Detail_aset $detail_aset)
+    public function update(Request $request, Detail_aset_penghapusan $detail_aset_penghapusan)
     {
         //
     }
@@ -91,13 +81,12 @@ class DetailAsetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Detail_aset  $detail_aset
+     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Detail_aset $detail_aset)
+    public function destroy(Detail_aset_penghapusan $detail_aset_penghapusan)
     {
-
-        Detail_aset::where('id', $detail_aset->id)->forceDelete();
+        Detail_aset_penghapusan::destroy($detail_aset_penghapusan->id);
         return redirect()->back();
     }
 }

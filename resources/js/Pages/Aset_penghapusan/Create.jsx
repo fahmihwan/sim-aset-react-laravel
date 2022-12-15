@@ -11,7 +11,7 @@ export default function Create(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         kode: props.kode || "",
         keterangan: "",
-        tanggal_mutasi: "",
+        tanggal_penghapusan: "",
     });
 
     const onHandleChange = (e) => {
@@ -20,7 +20,7 @@ export default function Create(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/aset_mutasi");
+        post("/aset_penghapusan");
     };
 
     return (
@@ -29,14 +29,14 @@ export default function Create(props) {
             errors={props.errors}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Tambah Aset Mutasi
+                    Tambah Aset Penghapusan
                 </h2>
             }
         >
             <Head title="Tambah Ruangan " />
             <div className="pt-5 px-8 flex justify-end">
                 <Link
-                    href={route("aset_mutasi.index")}
+                    href={route("aset_penghapusan.index")}
                     className="btn btn-sm bg-neutral "
                 >
                     Kembali
@@ -47,12 +47,14 @@ export default function Create(props) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white w-1/2  overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-5">
-                            <h1 className="text-2xl mb-3">Form Aset Mutasi</h1>
+                            <h1 className="text-2xl mb-3">
+                                Form Aset Penghapusan
+                            </h1>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <InputLabel
                                         forInput="kode"
-                                        value="kode mutasi"
+                                        value="kode penghapusan"
                                     />
                                     <TextInput
                                         id="kode"
@@ -71,20 +73,22 @@ export default function Create(props) {
                                 </div>
                                 <div className="mb-3">
                                     <InputLabel
-                                        forInput="tanggal_mutasi"
-                                        value="Tanggal aset mutasi"
+                                        forInput="tanggal_penghapusan"
+                                        value="Tanggal aset penghapusan"
                                     />
                                     <TextInput
-                                        id="tanggal_mutasi"
+                                        id="tanggal_penghapusan"
                                         type="date"
-                                        name="tanggal_mutasi"
-                                        value={data.tanggal_mutasi}
+                                        name="tanggal_penghapusan"
+                                        value={data.tanggal_penghapusan}
                                         handleChange={onHandleChange}
                                         className="mt-1 block w-full"
                                         isFocused={true}
                                     />
                                     <InputError
-                                        message={props.errors.tanggal_mutasi}
+                                        message={
+                                            props.errors.tanggal_penghapusan
+                                        }
                                         className="mt-2"
                                     />
                                 </div>
@@ -114,7 +118,10 @@ export default function Create(props) {
                                 >
                                     Reset
                                 </SecondaryButton>
-                                <PrimaryButton type="submit">
+                                <PrimaryButton
+                                    processing={processing}
+                                    type="submit"
+                                >
                                     Submit
                                 </PrimaryButton>
                             </form>

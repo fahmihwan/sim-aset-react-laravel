@@ -2,21 +2,17 @@
 
 namespace App\Models;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Aset_masuk extends Model
+class Aset_penghapusan extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
-    protected $casts = [
-        'tanggal_masuk' => 'datetime:l, d-m-Y',
-    ];
 
-    public function detail_asets()
+    public function detail_aset_penghapusans()
     {
-        return $this->hasMany(Detail_aset::class);
+        return $this->hasMany(Detail_aset_penghapusan::class);
     }
 }

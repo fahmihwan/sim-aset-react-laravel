@@ -10,9 +10,12 @@ class Aset extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
+    protected $casts = [
+        'created_at' => 'datetime:l, d-m-Y',
+    ];
 
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(Kategori::class)->withTrashed();
     }
 }

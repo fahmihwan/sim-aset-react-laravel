@@ -34,16 +34,17 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . User::class,
+            'hak_akses' => 'required',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'hak_akses' => $request->hak_akses,
             'password' => Hash::make($request->password),
         ]);
 
@@ -51,7 +52,34 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect('/account');
+        // return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function edit_account(User $user)
+    {
+        return Inertia::render('Auth/Register_user/Edit', [
+            'data' =>  $user
+        ]);
+    }
+
+
+    public function update_account(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'hak_akses' => 'required',
+        ]);
+
+        User::where('id', $id)->update($validated);
+        return redirect('/account');
+    }
+
+    public function destroy_account($id)
+    {
+        User::destroy($id);
+        return redirect()->back();
     }
 
     public function index_account_dashboard()

@@ -23,12 +23,12 @@ const Index = (props) => {
             <Head title="Ruangan" />
 
             <div className="pt-5 px-8  flex justify-end">
-                <Link
+                {/* <Link
                     href={route("ruangan.create")}
                     className="btn btn-sm bg-neutral "
                 >
                     Tambah Data
-                </Link>
+                </Link> */}
             </div>
 
             <div className="py-5">
@@ -63,10 +63,10 @@ const Index = (props) => {
                                                 <td>{data.created_at}</td>
                                                 <td>
                                                     <Link
-                                                        href={`/aset_masuk/${data.id}`}
+                                                        href={`/informasi-aset/${data.id}/list-kelas`}
                                                         className="btn btn-sm btn-info mr-3 text-white "
                                                     >
-                                                        <i className="fa-regular fa-folder-open"></i>
+                                                        <i class="fa-solid fa-circle-info"></i>
                                                     </Link>
                                                 </td>
                                             </tr>

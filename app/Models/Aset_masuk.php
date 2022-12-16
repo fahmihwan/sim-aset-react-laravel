@@ -17,6 +17,6 @@ class Aset_masuk extends Model
 
     public function detail_asets()
     {
-        return $this->hasMany(Detail_aset::class);
+        return $this->hasMany(Detail_aset::class)->withTrashed();
     }
 }

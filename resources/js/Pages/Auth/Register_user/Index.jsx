@@ -10,7 +10,7 @@ const Index = (props) => {
 
     const handleDelete = (id) => {
         confirm("apakah anda yakin ingin menghapus?") &&
-            Inertia.delete(`/kategori/${id}`);
+            Inertia.delete(`/account/${id}`);
     };
 
     return (
@@ -51,6 +51,9 @@ const Index = (props) => {
                                             email
                                         </th>
                                         <th className="bg-neutral text-white">
+                                            akses
+                                        </th>
+                                        <th className="bg-neutral text-white">
                                             Created At
                                         </th>
                                         <th className="bg-neutral text-white">
@@ -65,17 +68,15 @@ const Index = (props) => {
                                                 <th>{i + props.users.from}</th>
                                                 <td>{data.name}</td>
                                                 <td>{data.email}</td>
+                                                <td>{data.hak_akses}</td>
                                                 <td>{data.created_at}</td>
                                                 <td>
                                                     <Link
-                                                        href={`/kategori/${data.id}/edit`}
+                                                        href={`/account/${data.id}/edit`}
                                                         className="btn btn-sm btn-warning mr-3 "
                                                     >
                                                         Edit
                                                     </Link>
-                                                    {/* <Link className="btn btn-sm btn-error ">
-                                                        Hapus
-                                                    </Link> */}
                                                     <DangerButton
                                                         onClick={() =>
                                                             handleDelete(

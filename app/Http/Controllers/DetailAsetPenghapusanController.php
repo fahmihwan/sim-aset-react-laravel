@@ -37,7 +37,18 @@ class DetailAsetPenghapusanController extends Controller
     {
         $validated = $request->validate([
             'aset_penghapusan_id' => 'required',
-            'detail_aset_id' => 'required',
+            'detail_aset_id' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $cek = Detail_aset_penghapusan::where([
+                        ['detail_aset_id', '=', $request->detail_aset_id],
+                        ['aset_penghapusan_id', '=', $request->aset_penghapusan_id]
+                    ])->count();
+                    if ($cek != 0) {
+                        $fail('Kode detail aset sudah tersedia di list.');
+                    }
+                },
+            ],
             'kondisi' => 'required',
         ]);
 

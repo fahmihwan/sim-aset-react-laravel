@@ -6,7 +6,7 @@ import { Head, usePage } from "@inertiajs/inertia-react";
 import { Link } from "@inertiajs/inertia-react";
 
 const Index = (props) => {
-    const { errors } = usePage().props;
+    const { errors, auth } = usePage().props;
 
     const handleDelete = (id) => {
         confirm("apakah anda yakin ingin menghapus?") &&
@@ -26,12 +26,14 @@ const Index = (props) => {
             <Head title="Aset Masuk" />
 
             <div className="pt-5 px-8  flex justify-end">
-                <Link
-                    href={route("aset_masuk.create")}
-                    className="btn btn-sm bg-neutral "
-                >
-                    Tambah Data
-                </Link>
+                {auth.user.hak_akses == "sarpras" && (
+                    <Link
+                        href={route("aset_masuk.create")}
+                        className="btn btn-sm bg-neutral "
+                    >
+                        Tambah Data
+                    </Link>
+                )}
             </div>
 
             <div className="py-5">
@@ -90,15 +92,18 @@ const Index = (props) => {
                                                         <i className="fa-regular fa-folder-open"></i>
                                                     </Link>
 
-                                                    <DangerButton
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                data.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Hapus
-                                                    </DangerButton>
+                                                    {auth.user.hak_akses ==
+                                                        "sarpras" && (
+                                                        <DangerButton
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    data.id
+                                                                )
+                                                            }
+                                                        >
+                                                            Hapus
+                                                        </DangerButton>
+                                                    )}
                                                 </td>
                                             </tr>
                                         );

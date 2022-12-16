@@ -43,10 +43,13 @@ Route::middleware('auth', 'verified')->group(function () {
     // DASHBOARD
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // master data
-    Route::resource('/kategori', KategoriController::class);
-    Route::resource('/ruangan', RuanganController::class);
-    Route::resource('/aset', AsetController::class);
+    // master data  
+    Route::middleware(['access:sarpras'])->group(function () {
+        Route::resource('/kategori', KategoriController::class);
+        Route::resource('/ruangan', RuanganController::class);
+        Route::resource('/aset', AsetController::class);
+    });
+
 
     // informasi aset
     Route::get('/informasi-aset/list', [InformasiAsetController::class, 'index'])->name('informasi_aset.index');
@@ -72,6 +75,10 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/account', [RegisteredUserController::class, 'index_account_dashboard'])->name('account.index');
     Route::get('/account/create', [RegisteredUserController::class, 'create_account_dashboard'])->name('account.create');
+    Route::post('/account/store', [RegisteredUserController::class, 'store']);
+    Route::get('/account/{user}/edit', [RegisteredUserController::class, 'edit_account']);
+    Route::put('/account/{id}', [RegisteredUserController::class, 'update_account']);
+    Route::delete('/account/{id}', [RegisteredUserController::class, 'destroy_account']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

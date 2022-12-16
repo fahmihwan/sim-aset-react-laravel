@@ -5,9 +5,17 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Inertia } from "@inertiajs/inertia";
 import { Head, usePage } from "@inertiajs/inertia-react";
 import { Link } from "@inertiajs/inertia-react";
+import { useRef, useState } from "react";
 
 const LaporanMasuk = (props) => {
     const { errors } = usePage().props;
+    const search = useRef();
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    };
 
     return (
         <AuthenticatedLayout
@@ -22,13 +30,16 @@ const LaporanMasuk = (props) => {
             <Head title="Aset Masuk" />
 
             <div className="pt-5 px-8  flex justify-between">
-                <div className="flex">
+                <form onSubmit={handleSubmit} action="" className="flex">
                     <div className="mr-3">
                         <InputLabel forInput="start_date" value="start date" />
                         <input
                             type="date"
                             placeholder="Type here"
                             className="input input-bordered w-full max-w-xs"
+                            onChange={(e) => setStartDate(e.target.value)}
+                            value={startDate}
+                            required
                         />
                     </div>
                     <div className="mr-3">
@@ -37,6 +48,9 @@ const LaporanMasuk = (props) => {
                             type="date"
                             placeholder="Type here"
                             className="input input-bordered w-full max-w-xs"
+                            onChange={(e) => setEndDate(e.target.value)}
+                            value={endDate}
+                            required
                         />
                     </div>
                     <div className="flex items-end mr-3">
@@ -45,7 +59,7 @@ const LaporanMasuk = (props) => {
                     <div className="flex items-end">
                         <button className="btn btn-primary">Print</button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div className="py-5">
@@ -106,10 +120,10 @@ const LaporanMasuk = (props) => {
                                                 <td className="py-4">
                                                     <table className="table table-compact w-full">
                                                         <thead>
-                                                            <td></td>
-                                                            <td>kode</td>
-                                                            <td>aset</td>
-                                                            <td>ruangan</td>
+                                                            <th></th>
+                                                            <th>kode</th>
+                                                            <th>aset</th>
+                                                            <th>ruangan</th>
                                                         </thead>
                                                         <tbody>
                                                             {data.detail_asets.map(

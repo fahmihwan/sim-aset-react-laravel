@@ -47,6 +47,18 @@ class InformasiAsetController extends Controller
 
     public function show($id)
     {
-        return Inertia::render('Informasi_aset/Show');
+        $detail_aset = Detail_aset::with([
+            'aset:id,nama',
+            'ruangan:id,ruangan',
+            'aset_masuk:id,keterangan,tanggal_masuk',
+        ])
+            ->where('ruangan_id', $id)
+            ->latest()->get();
+
+
+        return Inertia::render('Informasi_aset/Show', [
+            'detail_asets' => $detail_aset,
+            'ruangan' => Ruangan::find($id)
+        ]);
     }
 }

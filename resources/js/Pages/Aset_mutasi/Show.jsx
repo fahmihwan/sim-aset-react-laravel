@@ -11,7 +11,7 @@ import { Switch } from "@headlessui/react";
 import { Alert } from "@/Components/Alert";
 
 export default function Create(props) {
-    const { aset_mutasi, ruangans, detail_aset_mutasi, flash } =
+    const { aset_mutasi, ruangans, detail_aset_mutasi, flash, auth } =
         usePage().props;
 
     console.log(flash);
@@ -110,7 +110,7 @@ export default function Create(props) {
             <div className="py-5">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 md:flex">
                     {/* FORM */}
-                    {enabled != true && (
+                    {enabled != true && auth.user.hak_akses == "sarpras" && (
                         <FormAsetMutasi
                             handleSubmit={handleSubmit}
                             onHandleChange={onHandleChange}
@@ -126,7 +126,9 @@ export default function Create(props) {
 
                     <div
                         className={`w-full  ${
-                            enabled != true ? "md:w-4/6" : "md:w-full"
+                            enabled != true && auth.user.hak_akses == "sarpras"
+                                ? "md:w-4/6"
+                                : "md:w-full"
                         }  m-2`}
                     >
                         <div className="bg-white">
@@ -136,33 +138,35 @@ export default function Create(props) {
                                     <KeteranganEl asetMutasi={aset_mutasi} />
                                 </div>
                                 {/* is Verify */}
-                                <div className=" w-1/12">
-                                    <InputLabel
-                                        forInput="Verifikasi"
-                                        value="Verifikasi"
-                                    />
-                                    <Switch
-                                        id="Verifikasi"
-                                        checked={enabled}
-                                        onChange={verifyData}
-                                        className={`${
-                                            enabled
-                                                ? "bg-blue-600"
-                                                : "bg-gray-200"
-                                        } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                        <span className="sr-only">
-                                            Enable notifications
-                                        </span>
-                                        <span
+                                {auth.user.hak_akses == "sekertaris" && (
+                                    <div className=" w-1/12">
+                                        <InputLabel
+                                            forInput="Verifikasi"
+                                            value="Verifikasi"
+                                        />
+                                        <Switch
+                                            id="Verifikasi"
+                                            checked={enabled}
+                                            onChange={verifyData}
                                             className={`${
                                                 enabled
-                                                    ? "translate-x-6"
-                                                    : "translate-x-1"
-                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                        />
-                                    </Switch>
-                                </div>
+                                                    ? "bg-blue-600"
+                                                    : "bg-gray-200"
+                                            } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                        >
+                                            <span className="sr-only">
+                                                Enable notifications
+                                            </span>
+                                            <span
+                                                className={`${
+                                                    enabled
+                                                        ? "translate-x-6"
+                                                        : "translate-x-1"
+                                                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                            />
+                                        </Switch>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

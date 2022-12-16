@@ -11,7 +11,7 @@ import { Switch } from "@headlessui/react";
 import { Alert } from "@/Components/Alert";
 
 export default function Create(props) {
-    const { aset_id, ruangan_id, aset_masuk, detail_aset_masuk, flash } =
+    const { aset_id, ruangan_id, aset_masuk, detail_aset_masuk, flash, auth } =
         usePage().props;
 
     const [enabled, setEnabled] = useState(aset_masuk.verifikasi);
@@ -76,7 +76,7 @@ export default function Create(props) {
             <div className="py-5">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 md:flex">
                     {/* SINI */}
-                    {enabled != true && (
+                    {enabled != true && auth.user.hak_akses == "sarpras" && (
                         <FormAsetMasuk
                             handleSubmit={handleSubmit}
                             data={data}
@@ -90,7 +90,9 @@ export default function Create(props) {
 
                     <div
                         className={`w-full  ${
-                            enabled != true ? "md:w-4/6" : "md:w-full"
+                            enabled != true && auth.user.hak_akses == "sarpras"
+                                ? "md:w-4/6"
+                                : "md:w-full"
                         }  m-2`}
                     >
                         <div className="bg-white">
@@ -140,33 +142,35 @@ export default function Create(props) {
                                     </table>
                                 </div>
                                 {/* is Verify */}
-                                <div className=" w-1/12">
-                                    <InputLabel
-                                        forInput="Verifikasi"
-                                        value="Verifikasi"
-                                    />
-                                    <Switch
-                                        id="Verifikasi"
-                                        checked={enabled}
-                                        onChange={verifyData}
-                                        className={`${
-                                            enabled
-                                                ? "bg-blue-600"
-                                                : "bg-gray-200"
-                                        } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                        <span className="sr-only">
-                                            Enable notifications
-                                        </span>
-                                        <span
+                                {auth.user.hak_akses == "sekertaris" && (
+                                    <div className=" w-1/12">
+                                        <InputLabel
+                                            forInput="Verifikasi"
+                                            value="Verifikasi"
+                                        />
+                                        <Switch
+                                            id="Verifikasi"
+                                            checked={enabled}
+                                            onChange={verifyData}
                                             className={`${
                                                 enabled
-                                                    ? "translate-x-6"
-                                                    : "translate-x-1"
-                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                        />
-                                    </Switch>
-                                </div>
+                                                    ? "bg-blue-600"
+                                                    : "bg-gray-200"
+                                            } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                        >
+                                            <span className="sr-only">
+                                                Enable notifications
+                                            </span>
+                                            <span
+                                                className={`${
+                                                    enabled
+                                                        ? "translate-x-6"
+                                                        : "translate-x-1"
+                                                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                            />
+                                        </Switch>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -197,20 +201,32 @@ export default function Create(props) {
                                                         {data.ruangan.ruangan}
                                                     </td>
                                                     {enabled ? (
-                                                        <td className="text-success text-2xl text-center">
+                                                        <td className="text-success text-2xl ">
                                                             <i className="fa-solid fa-circle-check"></i>
                                                         </td>
                                                     ) : (
-                                                        <td className="text-center">
-                                                            <DangerButton
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        data.id
-                                                                    )
-                                                                }
-                                                            >
-                                                                <i className="fa-regular fa-trash-can"></i>
-                                                            </DangerButton>
+                                                        <td className="">
+                                                            {auth.user
+                                                                .hak_akses ==
+                                                                "sekertaris" && (
+                                                                <td className="text-error text-2xl text-center">
+                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                                </td>
+                                                            )}
+
+                                                            {auth.user
+                                                                .hak_akses ==
+                                                                "sarpras" && (
+                                                                <DangerButton
+                                                                    onClick={() =>
+                                                                        handleDelete(
+                                                                            data.id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <i className="fa-regular fa-trash-can"></i>
+                                                                </DangerButton>
+                                                            )}
                                                         </td>
                                                     )}
                                                 </tr>

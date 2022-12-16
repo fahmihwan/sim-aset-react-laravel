@@ -41,10 +41,13 @@ class AsetController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'nama' => 'required',
             'kategori_id' => 'required',
         ]);
+
+
 
         Aset::create([
             'nama' => $request->nama,

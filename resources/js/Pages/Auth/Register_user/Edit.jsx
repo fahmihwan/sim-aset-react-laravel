@@ -8,12 +8,10 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/inertia-react";
 
 export default function Create(props) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        email: "",
-        hak_akses: "",
-        password: "",
-        password_confirmation: "",
+    const { data, setData, put, processing, errors, reset } = useForm({
+        name: props.data.name || "",
+        email: props.data.email || "",
+        hak_akses: props.data.hak_akses || "",
     });
 
     useEffect(() => {
@@ -33,7 +31,7 @@ export default function Create(props) {
 
     const submit = (e) => {
         e.preventDefault();
-        post("/account/store");
+        put(`/account/${props.data.id}`);
     };
 
     return (
@@ -109,6 +107,7 @@ export default function Create(props) {
                                         id="hak_akses"
                                         defaultValue={"DEFAULT"}
                                         name="hak_akses"
+                                        value={data.hak_akses}
                                         className="border-gray-300 w-full   focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         onChange={onHandleChange}
                                     >
@@ -130,7 +129,7 @@ export default function Create(props) {
                                     />
                                 </div>
 
-                                <div className="mt-4">
+                                {/* <div className="mt-4">
                                     <InputLabel
                                         forInput="password"
                                         value="Password"
@@ -173,21 +172,14 @@ export default function Create(props) {
                                         message={errors.password_confirmation}
                                         className="mt-2"
                                     />
-                                </div>
+                                </div> */}
 
                                 <div className="flex items-center justify-end mt-4">
-                                    <Link
-                                        href={route("login")}
-                                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    >
-                                        Already registered?
-                                    </Link>
-
                                     <PrimaryButton
                                         className="ml-4"
                                         processing={processing}
                                     >
-                                        Register
+                                        Update
                                     </PrimaryButton>
                                 </div>
                             </form>

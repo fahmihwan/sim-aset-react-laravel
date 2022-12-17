@@ -69,6 +69,9 @@ Route::middleware('auth', 'verified')->group(function () {
 
     // LAPORAN
     Route::get('/laporan/aset-masuk', [LaporanController::class, 'laporan_masuk'])->name('laporan.aset_masuk');
+    Route::get('/laporan/export_pdf_masuk', [LaporanController::class, 'export_pdf_masuk']);
+
+
     Route::get('/laporan/aset-mutasi', [LaporanController::class, 'laporan_mutasi'])->name('laporan.aset_mutasi');
     Route::get('/laporan/aset-dihapuskan', [LaporanController::class, 'laporan_dihapuskan'])->name('laporan.aset_dihapuskan');
 

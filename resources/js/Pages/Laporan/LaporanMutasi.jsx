@@ -3,16 +3,31 @@ import InputLabel from "@/Components/InputLabel";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Inertia } from "@inertiajs/inertia";
-import { Head, usePage } from "@inertiajs/inertia-react";
+import { Head, useForm, usePage } from "@inertiajs/inertia-react";
 import { Link } from "@inertiajs/inertia-react";
 
 const LaporanMutasi = (props) => {
     const { errors } = usePage().props;
-    console.log(props.data.data);
 
-    const handleDelete = (id) => {
-        confirm("apakah anda yakin ingin menghapus?") &&
-            Inertia.delete(`/kategori/${id}`);
+    const { data, setData, get, post } = useForm({
+        start_date: "",
+        end_date: "",
+    });
+
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value);
+    };
+
+    const sendPrint = () => {
+        post("/laporan/export_pdf_masuk");
+    };
+
+    const sendSearch = () => {
+        get("");
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
     };
 
     return (
@@ -33,6 +48,9 @@ const LaporanMutasi = (props) => {
                         <InputLabel forInput="start_date" value="start date" />
                         <input
                             type="date"
+                            name="start_date"
+                            value={data.start_date}
+                            onChange={handleChange}
                             placeholder="Type here"
                             className="input input-bordered w-full max-w-xs"
                         />
@@ -41,12 +59,20 @@ const LaporanMutasi = (props) => {
                         <InputLabel forInput="end_date" value="end date" />
                         <input
                             type="date"
+                            name="end_date"
+                            value={data.end_date}
+                            onChange={handleChange}
                             placeholder="Type here"
                             className="input input-bordered w-full max-w-xs"
                         />
                     </div>
                     <div className="flex items-end mr-3">
-                        <button className="btn btn-primary">Cari</button>
+                        <button
+                            onClick={sendSearch}
+                            className="btn btn-primary"
+                        >
+                            Cari
+                        </button>
                     </div>
                     <div className="flex items-end">
                         <button className="btn btn-primary">Print</button>

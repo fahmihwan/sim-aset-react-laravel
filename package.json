@@ -23,9 +23,10 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
-        "@heroicons/react": "^2.0.13",
         "chart.js": "^4.0.1",
         "daisyui": "^2.42.1",
-        "react-chartjs-2": "^5.0.1"
+        "js-file-download": "^0.4.12",
+        "react-chartjs-2": "^5.0.1",
+        "react-pdf": "^6.2.0"
     }
 }

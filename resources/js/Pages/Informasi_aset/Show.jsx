@@ -4,7 +4,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/inertia-react";
 
 export default function Show(props) {
-    console.log(props);
     return (
         <AuthenticatedLayout
             auth={props.auth}

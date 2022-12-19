@@ -44,9 +44,9 @@ export default function Dashboard(props) {
                 <div className=" max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* start */}
                     <div className="stats shadow mb-5">
-                        <InfoMasuk />
-                        <InfoMutasi />
-                        <InfoPenghapusan />
+                        <InfoMasuk count={props.masuk} />
+                        <InfoMutasi count={props.mutasi} />
+                        <InfoPenghapusan count={props.penghapusan} />
                     </div>
                     {/* endstat */}
 
@@ -113,11 +113,11 @@ const LineChart = ({ dataAsetMasuk, dataAsetMutasi, dataAsetPenghapusan }) => {
     );
 };
 
-const InfoMasuk = () => {
+const InfoMasuk = ({ count }) => {
     return (
         <div className="stat">
             <div className="stat-figure text-secondary">
-                <svg
+                {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -129,16 +129,17 @@ const InfoMasuk = () => {
                         strokeWidth="2"
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
-                </svg>
+                </svg> */}
+                <i class="fa-solid fa-truck-ramp-box text-2xl"></i>
             </div>
             <div className="stat-title">Aset Masuk</div>
-            <div className="stat-value">31K</div>
-            <div className="stat-desc">Jan 1st - Feb 1st</div>
+            <div className="stat-value">{count}</div>
+            {/* <div className="stat-desc">Jan 1st - Feb 1st</div> */}
         </div>
     );
 };
 
-const InfoMutasi = () => {
+const InfoMutasi = ({ count }) => {
     return (
         <div className="stat">
             <div className="stat-figure text-secondary">
@@ -157,13 +158,13 @@ const InfoMutasi = () => {
                 </svg>
             </div>
             <div className="stat-title">Aset Keluar</div>
-            <div className="stat-value">4,200</div>
-            <div className="stat-desc">↗︎ 400 (22%)</div>
+            <div className="stat-value">{count}</div>
+            {/* <div className="stat-desc">↗︎ 400 (22%)</div> */}
         </div>
     );
 };
 
-const InfoPenghapusan = () => {
+const InfoPenghapusan = ({ count }) => {
     return (
         <div className="stat">
             <div className="stat-figure text-secondary">
@@ -182,8 +183,8 @@ const InfoPenghapusan = () => {
                 </svg>
             </div>
             <div className="stat-title">New Penghpausan</div>
-            <div className="stat-value">1,200</div>
-            <div className="stat-desc">↘︎ 90 (14%)</div>
+            <div className="stat-value">{count}</div>
+            {/* <div className="stat-desc">↘︎ 90 (14%)</div> */}
         </div>
     );
 };

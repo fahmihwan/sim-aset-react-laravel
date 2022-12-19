@@ -3,8 +3,7 @@ import InputLabel from "@/Components/InputLabel";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, usePage } from "@inertiajs/inertia-react";
-import axios from "axios";
-import ExportBlob from "./exportBlob";
+import { ExportBlob } from "./ExportBlob";
 
 const LaporanMasuk = (props) => {
     const { errors, flash } = usePage().props;
@@ -13,42 +12,24 @@ const LaporanMasuk = (props) => {
         end_date: props.end_date || "",
     });
 
-    console.log(ExportBlob);
-    const handleChange = (e) => {
-        setData(e.target.name, e.target.value);
-    };
-
     const sendPrint = () => {
         data.start_date &&
             data.end_date &&
-            axios
-                .get(
-                    `/laporan/export_pdf_masuk?start_date=${data.start_date}&end_date=${data.end_date}`,
-                    {
-                        responseType: "blob",
-                    }
-                )
-                .then((res) => {
-                    var myBlob = new Blob([res.data], { type: "text/xml" });
-                    var myReader = new FileReader();
-                    myReader.onload = function (event) {
-                        if (event.target.result == 0) {
-                            alert("data tidak ditemukan");
-                        } else {
-                            let blob = new Blob([res.data], {
-                                type: res.headers["content-type"],
-                            });
-                            let link = document.createElement("a");
-                            link.href = window.URL.createObjectURL(blob);
-                            link.setAttribute("download", `laporan_masuk.pdf`);
-                            link.click();
-                        }
-                    };
-                    myReader.readAsText(myBlob);
-                })
-                .catch((err) => {
-                    alert(err);
-                });
+            ExportBlob(
+                `/laporan/export_pdf_masuk?start_date=${data.start_date}&end_date=${data.end_date}`,
+                "laporan_masuk.pdf"
+            );
+    };
+
+    const sendDetailPrint = (id) => {
+        ExportBlob(
+            `/laporan/export_detail_masuk?id=${id}`,
+            "laporan_detail_masuk.pdf"
+        );
+    };
+
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value);
     };
 
     const sendSearch = () => {
@@ -225,7 +206,14 @@ const LaporanMasuk = (props) => {
                                                     </table>
                                                 </td>
                                                 <td>
-                                                    <button className="btn btn-primary btn-sm">
+                                                    <button
+                                                        onClick={() =>
+                                                            sendDetailPrint(
+                                                                data.id
+                                                            )
+                                                        }
+                                                        className="btn btn-primary btn-sm"
+                                                    >
                                                         print
                                                     </button>
                                                 </td>

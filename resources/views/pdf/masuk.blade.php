@@ -6,44 +6,55 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    body{
+        padding: 10px;
+    }
         table#detail{
             border: 1px solid gray;
-            border-collapse: collapse
+            border-collapse: collapse;
         }
-        table,tr,td{    
+        table#detail tr td,th{
             border: 1px solid gray;
+        }
+
+        table,tr,td{   
+            margin-top: 10px; 
+            padding: 0  10px;
+            border-collapse: collapse;
+            border: 0px;
         }
     </style>
 </head>
 <body>
-    <div>
+    <div >
         <h5>Informasi Detail Aset Masuk</h5>
-        <p>tanggal : 12-12-2012</p>
+        <p>tanggal : {{date('d-m-Y')}}</p>
     </div>
     <div>   
         <table>
             <tr>
                 <td>kode masuk</td>
-                <td>AST123123123123</td>
+                <td>: {{$data->kode_masuk}}</td>
             </tr>
             <tr>
                 <td>tanggal aset masuk</td>
-                <td>12-02-2022</td>
+                <td>: {{$data->tanggal_masuk}}</td>
             </tr>
             <tr>
                 <td>verifikasi</td>
-                <td>sudah</td>
+                <td>: {{$data->verifikasi ?'sudah':'belum'}}</td>
             </tr>
             <tr>
                 <td>keterangan</td>
-                <td>
-                    dasdsadsadasdsasdadkljds
-                </td>
+                <td>: {{$data->keterangan}}</td>
             </tr>
         </table>
     </div>
-    <div >   
+    <div style="margin-top: 10px" >   
         <table id="detail">
             <thead>
                 <th>kode</th>
@@ -51,13 +62,14 @@
                 <th>ruangan</th>
             </thead>
             <tbody>
-                @foreach ($data as $d)
+                @foreach ($data->detail_asets as $d)
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{$d->kode_detail_aset}}</td>
+                    <td>{{$d->aset->nama}}</td>
+                    <td>{{$d->ruangan->ruangan}}</td>
                 </tr>
                 @endforeach
+
             </tbody>
         </table>
     </div>

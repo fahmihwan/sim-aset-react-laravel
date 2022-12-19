@@ -90,16 +90,6 @@ class AsetPenghapusanController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Aset_penghapusan  $aset_penghapusan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Aset_penghapusan $aset_penghapusan)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

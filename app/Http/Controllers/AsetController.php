@@ -56,16 +56,6 @@ class AsetController extends Controller
         return redirect('/aset');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Aset  $aset
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Aset $aset)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

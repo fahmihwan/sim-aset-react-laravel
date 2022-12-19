@@ -7,25 +7,7 @@ use Illuminate\Http\Request;
 
 class DetailAsetPenghapusanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -54,39 +36,6 @@ class DetailAsetPenghapusanController extends Controller
 
         Detail_aset_penghapusan::create($validated);
         return redirect()->back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Detail_aset_penghapusan $detail_aset_penghapusan)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Detail_aset_penghapusan $detail_aset_penghapusan)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Detail_aset_penghapusan  $detail_aset_penghapusan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Detail_aset_penghapusan $detail_aset_penghapusan)
-    {
-        //
     }
 
     /**

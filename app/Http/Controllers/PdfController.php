@@ -89,4 +89,59 @@ class PdfController extends Controller
         ]);
         return $pdf->download('laporan.pdf');
     }
+
+    public function export_detail_masuk()
+    {
+        $data = Aset_masuk::with([
+            'detail_asets',
+            'detail_asets.ruangan:id,ruangan',
+            'detail_asets.aset:id,nama'
+        ])->where('aset_masuks.id', request('id'))->first();
+
+        if ($data->count() == 0) {
+            return 0;
+        }
+
+        $pdf = Pdf::loadView('pdf.masuk', [
+            'data' => $data,
+        ]);
+        return $pdf->download('laporan.pdf');
+    }
+    public function export_detail_mutasi()
+    {
+        $data = Aset_mutasi::with([
+            'detail_aset_mutasis',
+            'detail_aset_mutasis.detail_aset:id,kode_detail_aset,aset_id',
+            'detail_aset_mutasis.detail_aset.aset:id,nama',
+            'detail_aset_mutasis.asal_ruangan:id,ruangan',
+            'detail_aset_mutasis.tujuan_ruangan:id,ruangan'
+        ])
+            ->where('aset_mutasis.id', request('id'))
+            ->first();
+        if ($data->count() == 0) {
+            return 0;
+        }
+        $pdf = Pdf::loadView('pdf.mutasi', [
+            'data' => $data,
+        ]);
+        return $pdf->download('laporan.pdf');
+    }
+    public function export_detail_penghapusan()
+    {
+        $data = Aset_penghapusan::with([
+            'detail_aset_penghapusans',
+            'detail_aset_penghapusans.detail_aset.ruangan:id,ruangan',
+            'detail_aset_penghapusans.detail_aset.aset:id,nama'
+        ])
+            ->where('aset_penghapusans.id', request('id'))
+            ->first();
+
+        if ($data->count() == 0) {
+            return 0;
+        }
+        $pdf = Pdf::loadView('pdf.penghapusan', [
+            'data' => $data,
+        ]);
+        return $pdf->download('laporan.pdf');
+    }
 }

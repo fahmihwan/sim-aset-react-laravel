@@ -4,6 +4,7 @@ use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AsetMasukController;
 use App\Http\Controllers\AsetMutasiController;
 use App\Http\Controllers\AsetPenghapusanController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DetailAsetController;
@@ -30,20 +31,12 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 
 Route::middleware('auth', 'verified')->group(function () {
     // DASHBOARD
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     // master data  
     Route::middleware(['access:sarpras'])->group(function () {
         Route::resource('/kategori', KategoriController::class);
@@ -81,6 +74,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/laporan/export_detail_masuk', [PdfController::class, 'export_detail_masuk']);
     Route::get('/laporan/export_detail_mutasi', [PdfController::class, 'export_detail_mutasi']);
     Route::get('/laporan/export_detail_penghapusan', [PdfController::class, 'export_detail_penghapusan']);
+
+
 
     Route::get('/account', [RegisteredUserController::class, 'index_account_dashboard'])->name('account.index');
     Route::get('/account/create', [RegisteredUserController::class, 'create_account_dashboard'])->name('account.create');

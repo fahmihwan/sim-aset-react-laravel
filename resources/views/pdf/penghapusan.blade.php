@@ -6,40 +6,51 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-
-        table#detail{
-            border: 1px solid gray;
-            border-collapse: collapse
+        *{
+            margin: 0px;
+            padding: 0px;
         }
-        table,tr,td{    
-            border: 1px solid gray;
+        body{
+            padding: 10px;
         }
-    </style>
+            table#detail{
+                border: 1px solid gray;
+                border-collapse: collapse;
+            }
+            table#detail tr td,th{
+                border: 1px solid gray;
+            }
+    
+            table,tr,td{   
+                margin-top: 10px; 
+                padding: 0  10px;
+                border-collapse: collapse;
+                border: 0px;
+            }
+        </style>
 </head>
 <body>
     <div>
         <h5>Informasi Detail Aset Penghapusan</h5>
-        <p>tanggal : 12-12-2012</p>
+        <p>tanggal : {{date('d-m-Y')}}</p>
     </div>
     <div>   
         <table>
             <tr>
-                <td>Kode Masuk</td>
-                <td>AST123123123123</td>
+                <td>Kode Penghapusan</td>
+                <td>{{$data->kode_penghapusan}}</td>
             </tr>
             <tr>
                 <td>tanggal aset penghapusan</td>
-                <td>12-02-2022</td>
+                <td>{{$data->tanggal_penghapusan}}</td>
             </tr>
             <tr>
                 <td>verifikasi</td>
-                <td>sudah</td>
+                <td>{{$data->verifikasi ? 'sudah':'belum'}}</td>
             </tr>
             <tr>
                 <td>keterangan</td>
-                <td>
-                    dasdsadsadasdsasdadkljds
-                </td>
+                <td>{{$data->keterangan}}</td>
             </tr>
         </table>
     </div>
@@ -49,16 +60,15 @@
                 <th>kode</th>
                 <th>aset</th>
                 <th>kondisi</th>
-                <th>asal</th>
-                <th>tujuan</th>
+                <th>ruangan</th>
             </thead>
             <tbody>
-                @foreach ($data as $d)
+                @foreach ($data->detail_aset_penghapusans as $d)
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{$d->detail_aset->kode_detail_aset}}</td>
+                    <td>{{$d->detail_aset->aset->nama}}</td>
+                    <td>{{$d->kondisi}}</td>
+                    <td>{{$d->detail_aset->ruangan->ruangan}}</td>
                 </tr>
                 @endforeach
             </tbody>

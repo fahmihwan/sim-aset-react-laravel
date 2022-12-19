@@ -91,16 +91,6 @@ class AsetMutasiController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Aset_mutasi  $aset_mutasi
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Aset_mutasi $aset_mutasi)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

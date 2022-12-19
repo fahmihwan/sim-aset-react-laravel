@@ -52,15 +52,6 @@ class RuanganController extends Controller
         return redirect('/ruangan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Ruangan  $ruangan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ruangan $ruangan)
-    {
-    }
 
     /**
      * Show the form for editing the specified resource.

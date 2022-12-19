@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aset_masuk;
 use App\Models\Detail_aset;
 use App\Models\Detail_aset_mutasi;
 use App\Models\Detail_aset_penghapusan;
@@ -33,10 +34,17 @@ class DashboardController extends Controller
             ->whereYear('aset_penghapusans.tanggal_penghapusan', Carbon::now()->format('Y'))
             ->get();
 
+        $masuk = Detail_aset::whereYear('created_at', Carbon::now()->format('Y'))->count();
+        $mutasi =  Detail_aset_mutasi::whereYear('created_at', Carbon::now()->format('Y'))->count();
+        $penghapusan = Detail_aset_penghapusan::whereYear('created_at', Carbon::now()->format('Y'))->count();
+
         return Inertia::render('Dashboard', [
             'aset_masuk' => $aset_masuk,
             'detail_aset_mutasi' => $detail_aset_mutasi,
-            'detail_aset_penghapusan' => $detail_aset_penghapusan
+            'detail_aset_penghapusan' => $detail_aset_penghapusan,
+            'masuk' => $masuk,
+            'mutasi' => $mutasi,
+            'penghapusan' => $penghapusan
         ]);
     }
 }

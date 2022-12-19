@@ -83,16 +83,7 @@ class AsetMasukController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Aset_masuk  $aset_masuk
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Aset_masuk $aset_masuk)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -109,15 +100,5 @@ class AsetMasukController extends Controller
         ]);
 
         return redirect()->back();
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Aset_masuk  $aset_masuk
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Aset_masuk $aset_masuk)
-    {
-        //
     }
 }

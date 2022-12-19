@@ -12,6 +12,7 @@ use App\Http\Controllers\DetailAsetPenghapusanController;
 use App\Http\Controllers\InformasiAsetController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
 use Illuminate\Foundation\Application;
@@ -50,7 +51,6 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/aset', AsetController::class);
     });
 
-
     // informasi aset
     Route::get('/informasi-aset/list', [InformasiAsetController::class, 'index'])->name('informasi_aset.index');
     Route::get('/informasi-aset/list-kelas', [InformasiAsetController::class, 'list_kelas'])->name('informasi_aset.list_kelas');
@@ -69,12 +69,18 @@ Route::middleware('auth', 'verified')->group(function () {
 
     // LAPORAN
     Route::get('/laporan/aset-masuk', [LaporanController::class, 'laporan_masuk'])->name('laporan.aset_masuk');
-    Route::get('/laporan/export_pdf_masuk', [LaporanController::class, 'export_pdf_masuk']);
-
-
     Route::get('/laporan/aset-mutasi', [LaporanController::class, 'laporan_mutasi'])->name('laporan.aset_mutasi');
     Route::get('/laporan/aset-dihapuskan', [LaporanController::class, 'laporan_dihapuskan'])->name('laporan.aset_dihapuskan');
 
+    // pdf
+    Route::get('/laporan/export_pdf_masuk', [PdfController::class, 'export_pdf_masuk']);
+    Route::get('/laporan/export_pdf_mutasi', [PdfController::class, 'export_pdf_mutasi']);
+    Route::get('/laporan/export_pdf_penghapusan', [PdfController::class, 'export_pdf_penghapusan']);
+
+    // pdf
+    Route::get('/laporan/export_detail_masuk', [PdfController::class, 'export_detail_masuk']);
+    Route::get('/laporan/export_detail_mutasi', [PdfController::class, 'export_detail_mutasi']);
+    Route::get('/laporan/export_detail_penghapusan', [PdfController::class, 'export_detail_penghapusan']);
 
     Route::get('/account', [RegisteredUserController::class, 'index_account_dashboard'])->name('account.index');
     Route::get('/account/create', [RegisteredUserController::class, 'create_account_dashboard'])->name('account.create');

@@ -2,56 +2,57 @@ import DangerButton from "@/Components/DangerButton";
 import InputLabel from "@/Components/InputLabel";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Inertia } from "@inertiajs/inertia";
 import { Head, useForm, usePage } from "@inertiajs/inertia-react";
-import { Link } from "@inertiajs/inertia-react";
 import axios from "axios";
-// import fileDownload from "js-file-download";
-import { useEffect, useState } from "react";
+import ExportBlob from "./exportBlob";
 
 const LaporanMasuk = (props) => {
-    const { errors } = usePage().props;
-
+    const { errors, flash } = usePage().props;
     const { data, setData, get, post } = useForm({
-        start_date: "2022-12-14",
-        end_date: "2022-12-15",
+        start_date: props.start_date || "",
+        end_date: props.end_date || "",
     });
 
+    console.log(ExportBlob);
     const handleChange = (e) => {
         setData(e.target.name, e.target.value);
     };
 
     const sendPrint = () => {
-        // get("/laporan/export_pdf_masuk");
-        axios
-            .get("/laporan/export_pdf_masuk", {
-                responseType: "blob",
-                // start_date: data.start_date,
-                // end_date: data.end_date,
-            })
-            .then((res) => {
-                console.log(res);
-                let blob = new Blob([res.data], {
-                    type: res.headers["content-type"],
+        data.start_date &&
+            data.end_date &&
+            axios
+                .get(
+                    `/laporan/export_pdf_masuk?start_date=${data.start_date}&end_date=${data.end_date}`,
+                    {
+                        responseType: "blob",
+                    }
+                )
+                .then((res) => {
+                    var myBlob = new Blob([res.data], { type: "text/xml" });
+                    var myReader = new FileReader();
+                    myReader.onload = function (event) {
+                        if (event.target.result == 0) {
+                            alert("data tidak ditemukan");
+                        } else {
+                            let blob = new Blob([res.data], {
+                                type: res.headers["content-type"],
+                            });
+                            let link = document.createElement("a");
+                            link.href = window.URL.createObjectURL(blob);
+                            link.setAttribute("download", `laporan_masuk.pdf`);
+                            link.click();
+                        }
+                    };
+                    myReader.readAsText(myBlob);
+                })
+                .catch((err) => {
+                    alert(err);
                 });
-
-                let link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                console.log(link);
-                // link.setAttribute("download", `FileName.pdf`);
-                // link.click();
-            })
-            .catch((err) => {
-                alert(err);
-            });
     };
 
     const sendSearch = () => {
-        get("");
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
+        data.start_date && data.end_date && get("");
     };
 
     return (
@@ -67,7 +68,11 @@ const LaporanMasuk = (props) => {
             <Head title="Aset Masuk" />
 
             <div className="pt-5 px-8  flex justify-between">
-                <form onSubmit={handleSubmit} action="" className="flex">
+                <form
+                    onSubmit={(e) => e.preventDefault()}
+                    action=""
+                    className="flex"
+                >
                     <div className="mr-3">
                         <InputLabel forInput="start_date" value="start date" />
                         <input
@@ -171,11 +176,14 @@ const LaporanMasuk = (props) => {
                                                 <td className="py-4">
                                                     <table className="table table-compact w-full">
                                                         <thead>
-                                                            <th></th>
-                                                            <th>kode</th>
-                                                            <th>aset</th>
-                                                            <th>ruangan</th>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>kode</td>
+                                                                <td>aset</td>
+                                                                <td>ruangan</td>
+                                                            </tr>
                                                         </thead>
+
                                                         <tbody>
                                                             {data.detail_asets.map(
                                                                 (d, i) => {
@@ -228,10 +236,10 @@ const LaporanMasuk = (props) => {
                                     {props.data.data.length == 0 && (
                                         <tr>
                                             <td
-                                                colSpan={4}
+                                                colSpan={7}
                                                 className="text-center"
                                             >
-                                                Data Belum Ada
+                                                Data Tidak Ditemukan
                                             </td>
                                         </tr>
                                     )}

@@ -1,17 +1,14 @@
-import DangerButton from "@/Components/DangerButton";
 import InputLabel from "@/Components/InputLabel";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Inertia } from "@inertiajs/inertia";
 import { Head, useForm, usePage } from "@inertiajs/inertia-react";
-import { Link } from "@inertiajs/inertia-react";
 
 const LaporanMutasi = (props) => {
     const { errors } = usePage().props;
 
     const { data, setData, get, post } = useForm({
-        start_date: "",
-        end_date: "",
+        start_date: props.start_date || "",
+        end_date: props.end_date || "",
     });
 
     const handleChange = (e) => {
@@ -19,15 +16,40 @@ const LaporanMutasi = (props) => {
     };
 
     const sendPrint = () => {
-        post("/laporan/export_pdf_masuk");
+        data.start_date &&
+            data.end_date &&
+            axios
+                .get(
+                    `/laporan/export_pdf_mutasi?start_date=${data.start_date}&end_date=${data.end_date}`,
+                    {
+                        responseType: "blob",
+                    }
+                )
+                .then((res) => {
+                    var myBlob = new Blob([res.data], { type: "text/xml" });
+                    var myReader = new FileReader();
+                    myReader.onload = function (event) {
+                        if (event.target.result == 0) {
+                            alert("data tidak ditemukan");
+                        } else {
+                            let blob = new Blob([res.data], {
+                                type: res.headers["content-type"],
+                            });
+                            let link = document.createElement("a");
+                            link.href = window.URL.createObjectURL(blob);
+                            link.setAttribute("download", `laporan_mutasi.pdf`);
+                            link.click();
+                        }
+                    };
+                    myReader.readAsText(myBlob);
+                })
+                .catch((err) => {
+                    alert(err);
+                });
     };
 
     const sendSearch = () => {
-        get("");
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
+        data.start_date && data.end_date && get("");
     };
 
     return (
@@ -43,7 +65,7 @@ const LaporanMutasi = (props) => {
             <Head title="Aset Masuk" />
 
             <div className="pt-5 px-8  flex justify-between">
-                <div className="flex">
+                <form onSubmit={(e) => e.preventDefault()} className="flex">
                     <div className="mr-3">
                         <InputLabel forInput="start_date" value="start date" />
                         <input
@@ -75,9 +97,11 @@ const LaporanMutasi = (props) => {
                         </button>
                     </div>
                     <div className="flex items-end">
-                        <button className="btn btn-primary">Print</button>
+                        <button onClick={sendPrint} className="btn btn-primary">
+                            Print
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div className="py-5">
@@ -212,10 +236,10 @@ const LaporanMutasi = (props) => {
                                     {props.data.data.length == 0 && (
                                         <tr>
                                             <td
-                                                colSpan={4}
+                                                colSpan={7}
                                                 className="text-center"
                                             >
-                                                Data Belum Ada
+                                                Data Tidak Ditemukan
                                             </td>
                                         </tr>
                                     )}

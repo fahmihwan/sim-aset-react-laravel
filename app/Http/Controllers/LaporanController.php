@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 
-use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Support\Facades\App;
 
 use function Termwind\render;
@@ -37,7 +37,9 @@ class LaporanController extends Controller
         }
 
         return Inertia::render('Laporan/LaporanMasuk', [
-            'data' => $data
+            'data' => $data,
+            'start_date' => request('start_date'),
+            'end_date' => request('end_date')
         ]);
     }
     public function laporan_mutasi()
@@ -64,7 +66,9 @@ class LaporanController extends Controller
         }
 
         return Inertia::render('Laporan/LaporanMutasi', [
-            'data' => $data
+            'data' => $data,
+            'start_date' => request('start_date'),
+            'end_date' => request('end_date')
         ]);
     }
     public function laporan_dihapuskan()
@@ -75,44 +79,20 @@ class LaporanController extends Controller
             'detail_aset_penghapusans.detail_aset.aset:id,nama'
         ])->paginate(5);
 
+        if (request('start_date')) {
+            $data =  Aset_penghapusan::with([
+                'detail_aset_penghapusans',
+                'detail_aset_penghapusans.detail_aset.ruangan:id,ruangan',
+                'detail_aset_penghapusans.detail_aset.aset:id,nama'
+            ])
+                ->whereBetween('aset_penghapusans.tanggal_penghapusan', [request('start_date'), request('end_date')])
+                ->paginate(5);
+        }
+
         return Inertia::render('Laporan/LaporanPenghapusan', [
-            'data' => $data
+            'data' => $data,
+            'start_date' => request('start_date'),
+            'end_date' => request('end_date')
         ]);
-    }
-
-    public function export_pdf_masuk(Request $request)
-    {
-
-        $start_date = '2022-12-14';
-        $end_date = '2022-12-15';
-
-        $data = Aset_masuk::with([
-            'detail_asets',
-            'detail_asets.ruangan:id,ruangan',
-            'detail_asets.aset:id,nama'
-        ])
-            // ->whereBetween('aset_masuks.tanggal_masuk', [request('start_date'), request('end_date')])
-            ->whereBetween('aset_masuks.tanggal_masuk', [$start_date, $end_date])
-            // ->whereBetween('aset_masuks.tanggal_masuk', [$request->start_date, $request->end_date])
-            ->get();
-
-
-        // return view('pdf.laporan_masuk', [
-        //     'data' => $data,
-        //     'start_date' => $start_date,
-        //     'end_date' => $end_date,
-        // ]);
-        // $pdf = Pdf::loadView('pdf.laporan_masuk', [
-        //     'data' => $data,
-        //     'start_date' => $start_date,
-        //     'end_date' => $end_date,
-        // ]);
-        $pdf = Pdf::loadView('pdf.laporan_masuk');
-        return $pdf->download('invoice.pdf');
-
-
-        // $pdf = PDF::loadview('PDF.laporan_masuk', ['data' => $data]);
-        //     // return $pdf->download('laporan-pegawai-pdf');
-        // }
     }
 }

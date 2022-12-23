@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
 
 export default function Create(props) {
-    const { aset_penghapusan, ruangans, detail_aset_penghapusans } =
+    const { aset_penghapusan, ruangans, detail_aset_penghapusans, auth } =
         usePage().props;
 
     const [enabled, setEnabled] = useState(aset_penghapusan.verifikasi);
@@ -88,7 +88,7 @@ export default function Create(props) {
             <div className="py-5">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 md:flex">
                     {/* FORM */}
-                    {enabled != true && (
+                    {enabled != true && auth.user.hak_akses == "sarpras" && (
                         <FormAsetPenghapusan
                             handleSubmit={handleSubmit}
                             setCariRuangan={setCariRuangan}
@@ -115,34 +115,37 @@ export default function Create(props) {
                                         asetPenghapusan={aset_penghapusan}
                                     />
                                 </div>
+
                                 {/* is Verify */}
-                                <div className=" w-1/12">
-                                    <InputLabel
-                                        forInput="Verifikasi"
-                                        value="Verifikasi"
-                                    />
-                                    <Switch
-                                        id="Verifikasi"
-                                        checked={enabled}
-                                        onChange={verifyData}
-                                        className={`${
-                                            enabled
-                                                ? "bg-blue-600"
-                                                : "bg-gray-200"
-                                        } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                        <span className="sr-only">
-                                            Enable notifications
-                                        </span>
-                                        <span
+                                {auth.user.hak_akses == "sekertaris" && (
+                                    <div className=" w-1/12">
+                                        <InputLabel
+                                            forInput="Verifikasi"
+                                            value="Verifikasi"
+                                        />
+                                        <Switch
+                                            id="Verifikasi"
+                                            checked={enabled}
+                                            onChange={verifyData}
                                             className={`${
                                                 enabled
-                                                    ? "translate-x-6"
-                                                    : "translate-x-1"
-                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                        />
-                                    </Switch>
-                                </div>
+                                                    ? "bg-blue-600"
+                                                    : "bg-gray-200"
+                                            } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                        >
+                                            <span className="sr-only">
+                                                Enable notifications
+                                            </span>
+                                            <span
+                                                className={`${
+                                                    enabled
+                                                        ? "translate-x-6"
+                                                        : "translate-x-1"
+                                                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                            />
+                                        </Switch>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

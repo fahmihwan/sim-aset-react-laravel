@@ -137,6 +137,7 @@ export default function Create(props) {
                                     {/* Tabel keterangan */}
                                     <KeteranganEl asetMutasi={aset_mutasi} />
                                 </div>
+
                                 {/* is Verify */}
                                 {auth.user.hak_akses == "sekertaris" && (
                                     <div className=" w-1/12">

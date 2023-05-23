@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Aset_masuk;
 use App\Models\Detail_aset;
+use App\Models\Gudang;
+use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -31,13 +33,75 @@ class DetailAsetController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kode_detail_aset' => 'required|unique:detail_asets',
             'aset_id' => 'required',
             'ruangan_id' => 'required',
             'aset_masuk_id' => 'required',
+            'jumlah' => 'required',
         ]);
 
-        Detail_aset::create($validated);
+        function generate_kode($kode, $validated)
+        {
+            $data = [];
+            for ($i = 1; $i <= $validated['jumlah']; $i++) {
+                $data[] = [
+                    'kode_detail_aset' => 'MD' . date("Ymd") . sprintf("%03d", $kode++),
+                    'aset_id' => $validated['aset_id'],
+                    'ruangan_id' => $validated['ruangan_id'],
+                    'aset_masuk_id' => $validated['aset_masuk_id'],
+                ];
+            }
+            return $data;
+        }
+        // cek gudang 
+        $gudang = Gudang::select('ruangan_id')->first();
+
+        // cek jika tanggal sekarang != kode
+        // increment mulai dari 0
+        // jika sama 
+        // increment dari yg sebelumnya
+
+        if (Detail_aset::where('ruangan_id', $gudang->ruangan_id)->exists()) { //jika ada
+            $last_detail_aset_id =  Detail_aset::select(["kode_detail_aset", "created_at"])
+                ->where('ruangan_id', $gudang->ruangan_id)
+                ->orderBy('kode_detail_aset', 'DESC')
+                ->limit(1)
+                ->first();
+            $get_date_from_kode = substr($last_detail_aset_id->kode_detail_aset, 2, 8);
+            if (date("Ymd") != $get_date_from_kode) {
+                $data = generate_kode(001, $validated);
+            } else {
+                $startIncrement = (int)substr($last_detail_aset_id->kode_detail_aset, 10);
+                $data = generate_kode($startIncrement, $validated);
+            }
+        } else { //jika tidak ada
+
+            $data = generate_kode(001, $validated);
+        }
+
+
+        foreach ($data as $d) {
+            Detail_aset::create([
+                'kode_detail_aset' => $d['kode_detail_aset'],
+                'aset_id' => $d['aset_id'],
+                'ruangan_id' => $d['ruangan_id'],
+                'aset_masuk_id' => $d['aset_masuk_id'],
+            ]);
+        }
+
+
+
+        // try {
+
+
+
+        //     }
+
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     dd($th->getMessage());
+        // }
+
+
 
         return redirect()->back()->with([
             'type' => 'fail',

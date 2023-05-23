@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DetailAsetController;
 use App\Http\Controllers\DetailAsetMutasiController;
 use App\Http\Controllers\DetailAsetPenghapusanController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\InformasiAsetController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LaporanController;
@@ -75,8 +76,6 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/laporan/export_detail_mutasi', [PdfController::class, 'export_detail_mutasi']);
     Route::get('/laporan/export_detail_penghapusan', [PdfController::class, 'export_detail_penghapusan']);
 
-
-
     Route::get('/account', [RegisteredUserController::class, 'index_account_dashboard'])->name('account.index');
     Route::get('/account/create', [RegisteredUserController::class, 'create_account_dashboard'])->name('account.create');
     Route::post('/account/store', [RegisteredUserController::class, 'store']);
@@ -87,6 +86,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // setting gudang
+    Route::resource('/setting/gudang', GudangController::class);
 });
 
 require __DIR__ . '/auth.php';

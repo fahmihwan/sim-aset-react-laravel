@@ -228,6 +228,14 @@ export default function Authenticated({ auth, header, children }) {
                                                 Pengaturan Akun
                                             </Dropdown.Link>
                                         )}
+                                        {auth.user.hak_akses ==
+                                            "sarpras" && (
+                                            <Dropdown.Link
+                                                href={route("gudang.index")}
+                                            >
+                                                Setting gudang
+                                            </Dropdown.Link>
+                                        )}
 
                                         <Dropdown.Link
                                             href={route("logout")}

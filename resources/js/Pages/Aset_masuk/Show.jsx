@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import DangerButton from "@/Components/DangerButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Switch } from "@headlessui/react";
 import { Alert } from "@/Components/Alert";
 
@@ -18,7 +18,7 @@ export default function Create(props) {
 
     const { data, setData, post, processing, errors, destroy, reset } = useForm(
         {
-            kode_detail_aset: "",
+            jumlah: "",
             aset_masuk_id: aset_masuk.id,
             aset_id: "",
             ruangan_id: "",
@@ -59,11 +59,11 @@ export default function Create(props) {
         >
             <Head title="Tambah Ruangan" />
             <div className="pt-5 px-8 flex justify-between">
-                {flash.type == "fail" ? (
+                {/* {flash.type == "fail" ? (
                     <Alert type={flash.type} message={flash.message} />
                 ) : (
                     <div></div>
-                )}
+                )} */}
 
                 <Link
                     href={route("aset_masuk.index")}
@@ -259,25 +259,6 @@ const FormAsetMasuk = ({
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <InputLabel
-                            forInput="kode_detail_aset"
-                            value="kode detail aset"
-                        />
-                        <TextInput
-                            id="kode_detail_aset"
-                            type="text"
-                            name="kode_detail_aset"
-                            value={data.kode_detail_aset}
-                            handleChange={onHandleChange}
-                            className="mt-1 block w-full"
-                            isFocused={true}
-                        />
-                        <InputError
-                            message={props.errors.kode_detail_aset}
-                            className="mt-2"
-                        />
-                    </div>
-                    <div className="mb-3">
                         <InputLabel forInput="aset_id" value="Data Aset" />
                         <select
                             className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
@@ -320,14 +301,30 @@ const FormAsetMasuk = ({
                             </option>
                             {ruangan_id.map((data, i) => {
                                 return (
-                                    <option key={i} value={data.id}>
-                                        {data.ruangan}
+                                    <option key={i} value={data.ruangan_id}>
+                                        {data?.ruangan?.ruangan}
                                     </option>
                                 );
                             })}
                         </select>
                         <InputError
                             message={props.errors.ruangan_id}
+                            className="mt-2"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <InputLabel forInput="jumlah" value="jumlah" />
+                        <TextInput
+                            id="jumlah"
+                            type="number"
+                            name="jumlah"
+                            value={data.jumlah}
+                            handleChange={onHandleChange}
+                            className="mt-1 block w-full"
+                            isFocused={true}
+                        />
+                        <InputError
+                            message={props.errors.jumlah}
                             className="mt-2"
                         />
                     </div>

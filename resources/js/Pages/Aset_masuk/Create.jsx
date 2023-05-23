@@ -10,6 +10,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 export default function Create(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         kode: props.kode || "",
+        penerima: "",
         keterangan: "",
         tanggal_masuk: "",
     });
@@ -87,6 +88,25 @@ export default function Create(props) {
                                 </div>
                                 <div className="mb-3">
                                     <InputLabel
+                                        forInput="penerima"
+                                        value="penerima"
+                                    />
+                                    <TextInput
+                                        id="penerima"
+                                        type="text"
+                                        name="penerima"
+                                        value={data.penerima}
+                                        handleChange={onHandleChange}
+                                        className="mt-1 block w-full"
+                                        isFocused={true}
+                                    />
+                                    <InputError
+                                        message={props.errors.penerima}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <InputLabel
                                         forInput="keterangan"
                                         value="keterangan"
                                     />
@@ -104,6 +124,7 @@ export default function Create(props) {
                                         className="mt-2"
                                     />
                                 </div>
+                             
 
                                 <SecondaryButton
                                     className="mr-3"

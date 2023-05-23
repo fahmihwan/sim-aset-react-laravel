@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Aset;
 use App\Models\Aset_masuk;
 use App\Models\Detail_aset;
+use App\Models\Gudang;
 use App\Models\Ruangan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class AsetMasukController extends Controller
     public function index()
     {
         return Inertia::render('Aset_masuk/Index', [
-            'aset_masuk' => Aset_masuk::paginate(5)
+            'aset_masuk' => Aset_masuk::latest()->paginate(5)
         ]);
     }
 
@@ -50,6 +51,7 @@ class AsetMasukController extends Controller
         $request->validate([
             'kode' => 'required',
             'keterangan' => 'required',
+            'penerima' => 'required',
             'tanggal_masuk' => 'required',
         ]);
 
@@ -57,6 +59,7 @@ class AsetMasukController extends Controller
             'kode_masuk' => $request->kode,
             'user_id' => auth()->user()->id,
             'keterangan' => $request->keterangan,
+            'penerima' => $request->penerima,
             'tanggal_masuk' => $request->tanggal_masuk,
             'verifikasi' => false
         ]);
@@ -73,12 +76,16 @@ class AsetMasukController extends Controller
      */
     public function show(Aset_masuk $aset_masuk)
     {
-        $detail_asset = Detail_aset::with(['aset', 'ruangan'])->where('aset_masuk_id', $aset_masuk->id)->latest()->get();
+        $detail_asset = Detail_aset::with(['aset', 'ruangan'])
+            ->where('aset_masuk_id', $aset_masuk->id)
+            ->orderBY('kode_detail_aset', 'DESC')->get();
 
+
+        // return Gudang::with('ruangan')->latest()->get();
         return Inertia::render('Aset_masuk/Show', [
             'aset_masuk' => $aset_masuk,
             'aset_id' => Aset::latest()->get(),
-            'ruangan_id' => Ruangan::latest()->get(),
+            'ruangan_id' => Gudang::with('ruangan')->latest()->get(),
             'detail_aset_masuk' => $detail_asset
         ]);
     }

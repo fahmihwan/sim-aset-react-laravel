@@ -89,7 +89,7 @@ export default function Create(props) {
                                 <div className="mb-3">
                                     <InputLabel
                                         forInput="penerima"
-                                        value="penerima"
+                                        value="asal aset"
                                     />
                                     <TextInput
                                         id="penerima"
@@ -124,7 +124,6 @@ export default function Create(props) {
                                         className="mt-2"
                                     />
                                 </div>
-                             
 
                                 <SecondaryButton
                                     className="mr-3"

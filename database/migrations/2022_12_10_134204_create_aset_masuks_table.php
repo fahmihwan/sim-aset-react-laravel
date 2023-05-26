@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('kode_masuk');
             $table->foreignIdFor(User::class);
             $table->text('keterangan');
-            $table->text('penerima');
+            $table->text('asal_aset');
             $table->boolean('verifikasi');
             $table->date('tanggal_masuk');
             $table->softDeletes();

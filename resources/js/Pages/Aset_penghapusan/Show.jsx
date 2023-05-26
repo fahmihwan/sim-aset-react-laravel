@@ -456,10 +456,10 @@ const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
                     name="kodisi"
                     className="radio checked:bg-blue-500 mr-1"
                     onChange={funcHandleChange}
-                    checked={dataKondisi == "bagus"}
-                    value="bagus"
+                    checked={dataKondisi == "hilang"}
+                    value="hilang"
                 />
-                <span className="label-text">Bagus</span>
+                <span className="label-text">hilang</span>
             </label>
             <label className="cursor-pointer mr-3 ">
                 <input
@@ -467,21 +467,10 @@ const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
                     name="kodisi"
                     className="radio checked:bg-blue-500 mr-1"
                     onChange={funcHandleChange}
-                    checked={dataKondisi == "layak"}
-                    value="layak"
+                    checked={dataKondisi == "rusak"}
+                    value="rusak"
                 />
-                <span className="label-text">Layak</span>
-            </label>
-            <label className="cursor-pointer  ">
-                <input
-                    type="radio"
-                    name="kodisi"
-                    className="radio checked:bg-blue-500 mr-1"
-                    onChange={funcHandleChange}
-                    checked={dataKondisi == "buruk"}
-                    value="buruk"
-                />
-                <span className="label-text">Buruk</span>
+                <span className="label-text">rusak</span>
             </label>
         </div>
     );

@@ -56,7 +56,7 @@ const Index = (props) => {
                                             Verfikasi
                                         </th>
                                         <th className="bg-neutral text-white">
-                                            Penerima
+                                            Asal aset
                                         </th>
                                         <th className="bg-neutral text-white">
                                             keterangan
@@ -86,7 +86,7 @@ const Index = (props) => {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td>{data.penerima}</td>
+                                                <td>{data.asal_aset}</td>
                                                 <td>{data.keterangan}</td>
                                                 <td>
                                                     <Link

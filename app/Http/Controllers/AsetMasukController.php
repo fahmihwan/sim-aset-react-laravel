@@ -59,7 +59,7 @@ class AsetMasukController extends Controller
             'kode_masuk' => $request->kode,
             'user_id' => auth()->user()->id,
             'keterangan' => $request->keterangan,
-            'penerima' => $request->penerima,
+            'asal_aset' => $request->penerima,
             'tanggal_masuk' => $request->tanggal_masuk,
             'verifikasi' => false
         ]);

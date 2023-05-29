@@ -13,4 +13,8 @@ class Ruangan extends Model
     protected $casts = [
         'created_at' => 'datetime:l, d-m-Y',
     ];
+    public function detail_aset_mutasis()
+    {
+        return $this->hasMany(Detail_aset_mutasi::class);
+    }
 }

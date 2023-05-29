@@ -24,7 +24,7 @@ class AsetMutasiController extends Controller
     public function index()
     {
         return Inertia::render('Aset_mutasi/Index', [
-            'aset_mutasi' => Aset_mutasi::paginate(5)
+            'aset_mutasi' => Aset_mutasi::latest()->paginate(5)
         ]);
     }
 
@@ -74,6 +74,7 @@ class AsetMutasiController extends Controller
      */
     public function show(Aset_mutasi $aset_mutasi)
     {
+
         $detail_asset = Detail_aset_mutasi::with([
             'detail_aset:id,kode_detail_aset,aset_id',
             'detail_aset.aset:id,nama',
@@ -117,20 +118,25 @@ class AsetMutasiController extends Controller
             $detail_asset_mutasi = Detail_aset_mutasi::select([
                 'detail_aset_id',
                 'asal_ruangan_id',
-                'tujuan_ruangan_id'
+                'tujuan_ruangan_id',
+                'kondisi'
             ])
                 ->where('aset_mutasi_id', $aset_mutasi->id)
                 ->get();
+
+
 
             foreach ($detail_asset_mutasi as $d) {
                 // update detail aset
                 if ($request->verifikasi) {
                     Detail_aset::where('id', $d->detail_aset_id)->update([
-                        'ruangan_id' => $d->tujuan_ruangan_id
+                        'ruangan_id' => $d->tujuan_ruangan_id,
+                        'kondisi' => $d->kondisi,
                     ]);
                 } else {
                     Detail_aset::where('id', $d->detail_aset_id)->update([
-                        'ruangan_id' => $d->asal_ruangan_id
+                        'ruangan_id' => $d->asal_ruangan_id,
+                        'kondisi' => $d->kondisi,
                     ]);
                 }
             }
@@ -159,5 +165,12 @@ class AsetMutasiController extends Controller
     function get_detail_aset($id)
     {
         return Detail_aset::with(['ruangan', 'aset'])->where('ruangan_id', $id)->get();
+    }
+    function get_detail_aset_for_penghapusan($id)
+    {
+        return Detail_aset::with(['ruangan', 'aset'])
+            ->where('ruangan_id', $id)
+            ->whereIn('kondisi', ['hilang', 'rusak'])
+            ->get();
     }
 }

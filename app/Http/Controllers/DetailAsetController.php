@@ -41,6 +41,7 @@ class DetailAsetController extends Controller
 
         function generate_kode($kode, $validated)
         {
+
             $data = [];
             for ($i = 1; $i <= $validated['jumlah']; $i++) {
                 $data[] = [
@@ -71,7 +72,7 @@ class DetailAsetController extends Controller
                 $data = generate_kode(001, $validated);
             } else {
                 $startIncrement = (int)substr($last_detail_aset_id->kode_detail_aset, 10);
-                $data = generate_kode($startIncrement, $validated);
+                $data = generate_kode($startIncrement + 1, $validated);
             }
         } else { //jika tidak ada
 
@@ -85,6 +86,7 @@ class DetailAsetController extends Controller
                 'aset_id' => $d['aset_id'],
                 'ruangan_id' => $d['ruangan_id'],
                 'aset_masuk_id' => $d['aset_masuk_id'],
+                'kondisi' => 'bagus'
             ]);
         }
 

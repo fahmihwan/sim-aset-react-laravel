@@ -57,6 +57,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('/detail_aset', DetailAsetController::class);
     Route::resource('/aset_mutasi', AsetMutasiController::class);
     Route::get('/get_detail_aset/aset_mutasi/{id}', [AsetMutasiController::class, 'get_detail_aset']);
+    Route::get('/get_detail_aset_for_penghapusan/aset_mutasi/{id}', [AsetMutasiController::class, 'get_detail_aset_for_penghapusan']);
+
 
     Route::resource('/detail_aset_mutasi', DetailAsetMutasiController::class);
     Route::resource('/aset_penghapusan', AsetPenghapusanController::class);

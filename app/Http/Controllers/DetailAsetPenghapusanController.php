@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Detail_aset;
 use App\Models\Detail_aset_penghapusan;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,7 @@ class DetailAsetPenghapusanController extends Controller
      */
     public function store(Request $request)
     {
+        $detail_asettt = Detail_aset::where('id', $request->detail_aset_id)->first();
         $validated = $request->validate([
             'aset_penghapusan_id' => 'required',
             'detail_aset_id' => [
@@ -31,8 +33,8 @@ class DetailAsetPenghapusanController extends Controller
                     }
                 },
             ],
-            'kondisi' => 'required',
         ]);
+        $validated['kondisi'] = $detail_asettt->kondisi;
 
         Detail_aset_penghapusan::create($validated);
         return redirect()->back();

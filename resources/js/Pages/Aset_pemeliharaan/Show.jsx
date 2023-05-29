@@ -366,7 +366,8 @@ const ModalData = ({ detailAset, funcChoose }) => {
         } else if (
             data.kode_detail_aset
                 .toLowerCase()
-                .includes(search.toLocaleLowerCase())
+                .includes(search.toLowerCase()) ||
+            data.aset.nama.toLowerCase().includes(search.toLowerCase())
         ) {
             return data;
         }
@@ -391,7 +392,7 @@ const ModalData = ({ detailAset, funcChoose }) => {
                         isFocused={true}
                         autoComplete="off"
                         handleChange={(e) => setSearch(e.target.value)}
-                        placeholder="cari kode"
+                        placeholder="cari kode / nama"
                     />
                     <div className="overflow-scroll h-96">
                         <table className="table w-full">
@@ -482,6 +483,17 @@ const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
                     value="rusak"
                 />
                 <span className="label-text">rusak</span>
+            </label>
+            <label className="cursor-pointer mr-3 ">
+                <input
+                    type="radio"
+                    name="kodisi"
+                    className="radio checked:bg-blue-500 mr-1"
+                    onChange={funcHandleChange}
+                    checked={dataKondisi == "layak"}
+                    value="layak"
+                />
+                <span className="label-text">layak</span>
             </label>
         </div>
     );

@@ -14,7 +14,6 @@ export default function Create(props) {
     const { aset_mutasi, ruangans, detail_aset_mutasi, flash, auth } =
         usePage().props;
 
-    console.log(flash);
     const [enabled, setEnabled] = useState(aset_mutasi.verifikasi);
     const [detailAset, setDetailAset] = useState([]);
     const [kode, setKode] = useState({
@@ -23,13 +22,19 @@ export default function Create(props) {
 
     const { data, setData, post, processing, errors, destroy, reset } = useForm(
         {
-            asal_ruangan_id: "",
+            asal_ruangan_id:
+                detail_aset_mutasi.length > 0
+                    ? detail_aset_mutasi[0].asal_ruangan_id
+                    : "",
+            tujuan_ruangan_id:
+                detail_aset_mutasi.length > 0
+                    ? detail_aset_mutasi[0].tujuan_ruangan_id
+                    : "",
             aset_mutasi_id: aset_mutasi.id,
             detail_aset_id: "",
             kondisi: "",
         }
     );
-    console.log(data);
 
     useEffect(() => {
         if (data.asal_ruangan_id != false) {
@@ -61,6 +66,7 @@ export default function Create(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         post("/detail_aset_mutasi");
+
         setKode({
             kode: "",
         });
@@ -117,6 +123,7 @@ export default function Create(props) {
                             ruangans={ruangans}
                             props={props}
                             kode={kode}
+                            detail_aset_mutasi={detail_aset_mutasi}
                             detailAset={detailAset}
                             handleChooseKode={handleChooseKode}
                             setData={setData}
@@ -199,6 +206,7 @@ const FormAsetMutasi = ({
     handleChooseKode,
     setData,
     data,
+    detail_aset_mutasi,
 }) => {
     return (
         <div className="bg-white w-full md:w-2/6 shadow-sm sm:rounded-lg m-2">
@@ -213,10 +221,15 @@ const FormAsetMutasi = ({
                         />
                         <select
                             className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                            defaultValue={"DEFAULT"}
+                            defaultValue={
+                                detail_aset_mutasi.length > 0
+                                    ? detail_aset_mutasi[0].asal_ruangan_id
+                                    : "DEFAULT"
+                            }
                             name="asal_ruangan_id"
                             id="asal_ruangan_id"
                             onChange={onHandleChange}
+                            disabled={detail_aset_mutasi.length > 0}
                         >
                             <option value={"DEFAULT"} disabled>
                                 pilih ruangan
@@ -277,10 +290,15 @@ const FormAsetMutasi = ({
                         />
                         <select
                             className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
-                            defaultValue={"DEFAULT"}
                             name="tujuan_ruangan_id"
                             id="tujuan_ruangan_id"
                             onChange={onHandleChange}
+                            defaultValue={
+                                detail_aset_mutasi.length > 0
+                                    ? detail_aset_mutasi[0].tujuan_ruangan_id
+                                    : "DEFAULT"
+                            }
+                            disabled={detail_aset_mutasi.length > 0}
                         >
                             <option value={"DEFAULT"} disabled>
                                 pilih tujuan ruangan
@@ -436,10 +454,10 @@ const KondisiEl = ({ funcHandleChange, dataKondisi }) => {
                     name="kodisi"
                     className="radio checked:bg-blue-500 mr-1"
                     onChange={funcHandleChange}
-                    checked={dataKondisi == "buruk"}
-                    value="buruk"
+                    checked={dataKondisi == "rusak"}
+                    value="rusak"
                 />
-                <span className="label-text">Buruk</span>
+                <span className="label-text">Rusak</span>
             </label>
         </div>
     );
@@ -452,7 +470,10 @@ const ModalData = ({ detailAset, funcChoose }) => {
         if (search == "") {
             return data;
         } else if (
-            data.kode_detail_aset.toLowerCase().includes(search.toLowerCase())
+            data.kode_detail_aset
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
+            data.aset.nama.toLowerCase().includes(search.toLowerCase())
         ) {
             return data;
         }
@@ -478,7 +499,7 @@ const ModalData = ({ detailAset, funcChoose }) => {
                         value={search}
                         handleChange={(e) => setSearch(e.target.value)}
                         autoComplete="off"
-                        placeholder="cari kode"
+                        placeholder="cari kode / nama aset"
                     />
                     <div className="overflow-scroll h-96">
                         <table className="table w-full">

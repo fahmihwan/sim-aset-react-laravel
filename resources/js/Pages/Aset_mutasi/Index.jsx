@@ -83,7 +83,11 @@ const Index = (props) => {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td>{data.keterangan}</td>
+                                                <td>
+                                                    <div className="overflow-hidden truncate w-36 ">
+                                                        {data.keterangan}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <Link
                                                         href={`/aset_mutasi/${data.id}`}

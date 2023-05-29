@@ -23,12 +23,11 @@ export default function Create(props) {
     const { data, setData, post } = useForm({
         aset_penghapusan_id: aset_penghapusan.id,
         detail_aset_id: "",
-        kondisi: "",
     });
 
     useEffect(() => {
         if (cariRuangan != null) {
-            fetch(`/get_detail_aset/aset_mutasi/${cariRuangan}`)
+            fetch(`/get_detail_aset_for_penghapusan/aset_mutasi/${cariRuangan}`)
                 .then((res) => res.json())
                 .then((res) => {
                     setDetailAset(res);
@@ -250,19 +249,7 @@ const FormAsetPenghapusan = ({
                     </div>
 
                     {/* KONDISI */}
-                    <div className="mb-3">
-                        <InputLabel forInput="kondisi" value="Kondisi" />
-                        <KondisiEl
-                            funcHandleChange={(e) =>
-                                setData("kondisi", e.target.value)
-                            }
-                            dataKondisi={data.kondisi}
-                        />
-                        <InputError
-                            message={props.errors.kondisi}
-                            className="mt-2"
-                        />
-                    </div>
+
                     <PrimaryButton type="submit">Submit</PrimaryButton>
                 </form>
             </div>
@@ -366,7 +353,8 @@ const ModalData = ({ detailAset, funcChoose }) => {
         } else if (
             data.kode_detail_aset
                 .toLowerCase()
-                .includes(search.toLocaleLowerCase())
+                .includes(search.toLowerCase()) ||
+            data.aset.nama.toLowerCase().includes(search.toLowerCase())
         ) {
             return data;
         }
@@ -391,7 +379,7 @@ const ModalData = ({ detailAset, funcChoose }) => {
                         isFocused={true}
                         autoComplete="off"
                         handleChange={(e) => setSearch(e.target.value)}
-                        placeholder="cari kode"
+                        placeholder="cari kode / nama"
                     />
                     <div className="overflow-scroll h-96">
                         <table className="table w-full">
@@ -401,6 +389,7 @@ const ModalData = ({ detailAset, funcChoose }) => {
                                     <th>Kode </th>
                                     <th>Aset</th>
                                     <th>asal ruangan</th>
+                                    <th>kondisi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -428,6 +417,7 @@ const ModalData = ({ detailAset, funcChoose }) => {
                                                 </td>
                                                 <td>{data.aset.nama}</td>
                                                 <td>{data.ruangan.ruangan}</td>
+                                                <td>{data.kondisi}</td>
                                             </tr>
                                         );
                                     })

@@ -16,6 +16,11 @@ class Detail_aset extends Model
         'updated_at' => 'datetime:l, d-m-Y',
     ];
 
+    public function detail_aset_pemeliharaans()
+    {
+        return $this->hasMany(Detail_aset_pemeliharaan::class);
+    }
+
 
     public function aset()
     {

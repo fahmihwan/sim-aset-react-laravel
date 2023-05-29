@@ -17,6 +17,18 @@ class PemeliharaanController extends Controller
 {
     public function index()
     {
+        // return Detail_aset::select(['detail_asets.id', 'detail_aset_pemeliharaans.kondisi', 'kode_detail_aset', 'asets.nama', 'ruangans.ruangan'])
+        //     ->leftJoin('detail_aset_pemeliharaans', 'detail_asets.id', '=', 'detail_aset_pemeliharaans.detail_aset_id')
+        //     ->join('asets', 'detail_asets.aset_id', '=', 'asets.id')
+        //     ->join('ruangans', 'detail_asets.ruangan_id', '=', 'ruangans.id')
+        //     ->where('detail_aset_pemeliharaans.id', '!=', null)
+        //     ->groupBy('detail_asets.id')
+        //     ->where('detail_asets.id', 3)
+        //     ->get();
+        // return Detail_aset::with('detail_aset_pemeliharaans')->where('detail_aset_pemeliharaans', null)->get();
+        // return Detail_aset::with('detail_aset_pemeliharaans')->where(function ($q) {
+        //     return $q->whereNotNull('detail_aset_pemeliharaans');
+        // })->get();
         return Inertia::render('Aset_pemeliharaan/Index', [
             'aset_pemeliharaan' =>  Aset_pemeliharaan::latest()->paginate(5)
         ]);
@@ -125,8 +137,14 @@ class PemeliharaanController extends Controller
                     Detail_aset_mutasi::where('detail_aset_id', $d->detail_aset_id)->update([
                         'kondisi' => $d->kondisi
                     ]);
+                    Detail_aset::where('id', $d->id)->update([
+                        'kondisi' => $d->kondisi
+                    ]);
                 } else {
                     Detail_aset_mutasi::where('id', $d->detail_aset_id)->update([
+                        'kondisi' => 'bagus'
+                    ]);
+                    Detail_aset::where('id', $d->id)->update([
                         'kondisi' => 'bagus'
                     ]);
                 }

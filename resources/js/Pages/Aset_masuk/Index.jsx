@@ -37,7 +37,7 @@ const Index = (props) => {
             </div>
 
             <div className="py-5">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto  w-full ">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-10">
                         <div className="overflow-x-auto">
                             <table className="table w-full">
@@ -87,7 +87,11 @@ const Index = (props) => {
                                                     )}
                                                 </td>
                                                 <td>{data.asal_aset}</td>
-                                                <td>{data.keterangan}</td>
+                                                <td>
+                                                    <div className="overflow-hidden truncate w-20">
+                                                        {data.keterangan}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <Link
                                                         href={`/aset_masuk/${data.id}`}

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Aset_pemeliharaan::class);
             $table->foreignIdFor(Detail_aset::class);
-            $table->enum('kondisi', ['bagus', 'hilang', 'rusak']);
+            $table->enum('kondisi', ['bagus', 'hilang', 'rusak', 'layak']);
             $table->timestamps();
         });
     }

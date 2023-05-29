@@ -82,7 +82,11 @@ class AsetPenghapusanController extends Controller
             ->where('aset_penghapusan_id', $aset_penghapusan->id)
             ->latest()
             ->get();
+        // $murid = Murid::doesntHave('perpindahans')->latest()->paginate(5);
 
+        // return Ruangan::doesntHave('detail_aset_mutasis')->latest()->get();
+
+        // return Ruangan::leftJoin('detail_aset_mutasis', 'ruangans.id', '=', 'detail_aset_mutasis.asal_ruangan_id')->get();
         return Inertia::render('Aset_penghapusan/Show', [
             'aset_penghapusan' => $aset_penghapusan,
             'ruangans' => Ruangan::latest()->get(),

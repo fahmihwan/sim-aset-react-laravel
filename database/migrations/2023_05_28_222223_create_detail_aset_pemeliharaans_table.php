@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\Aset_penghapusan;
+use App\Models\Aset_pemeliharaan;
 use App\Models\Detail_aset;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +16,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('detail_aset_penghapusans', function (Blueprint $table) {
+        Schema::create('detail_aset_pemeliharaans', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Aset_penghapusan::class);
+            $table->foreignIdFor(Aset_pemeliharaan::class);
             $table->foreignIdFor(Detail_aset::class);
             $table->enum('kondisi', ['bagus', 'hilang', 'rusak']);
             $table->timestamps();
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_aset_penghapusans');
+        Schema::dropIfExists('detail_aset_pemeliharaans');
     }
 };

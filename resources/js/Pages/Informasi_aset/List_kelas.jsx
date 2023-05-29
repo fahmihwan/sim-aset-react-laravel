@@ -66,7 +66,7 @@ const Index = (props) => {
                                                         href={`/informasi-aset/${data.id}/list-kelas`}
                                                         className="btn btn-sm btn-info mr-3 text-white "
                                                     >
-                                                        <i class="fa-solid fa-circle-info"></i>
+                                                        <i className="fa-solid fa-circle-info"></i>
                                                     </Link>
                                                 </td>
                                             </tr>

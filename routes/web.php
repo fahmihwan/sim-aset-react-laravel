@@ -15,6 +15,7 @@ use App\Http\Controllers\InformasiAsetController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PemeliharaanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
 use Illuminate\Foundation\Application;
@@ -60,6 +61,15 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('/detail_aset_mutasi', DetailAsetMutasiController::class);
     Route::resource('/aset_penghapusan', AsetPenghapusanController::class);
     Route::resource('/detail_aset_penghapusan', DetailAsetPenghapusanController::class);
+
+    Route::get("/aset_pemeliharaan", [PemeliharaanController::class, 'index'])->name('aset_pemeliharaan.index');
+    Route::get("/aset_pemeliharaan/create", [PemeliharaanController::class, 'create'])->name('aset_pemeliharaan.create');;
+    Route::get("/aset_pemeliharaan/{id}", [PemeliharaanController::class, 'show'])->name('aset_pemeliharaan.show');
+    Route::put("/aset_pemeliharaan/{id}", [PemeliharaanController::class, 'update'])->name('aset_pemeliharaan.update');
+    Route::post("/aset_pemeliharaan", [PemeliharaanController::class, 'store'])->name('aset_pemeliharaan.store');
+    Route::delete('/aset_pemeliharaan/{id}', [PemeliharaanController::class, 'destroy'])->name('aset_pemeliharaan.destroy');
+    Route::post('/store_detail_pemeliharaan', [PemeliharaanController::class, 'store_detail_pemeliharaan'])->name('aset_pemeliharaan.store_detail_pemeliharaan');
+    Route::delete('/destroy_detail_pemeliharaan/{id}', [PemeliharaanController::class, 'destroy_detail_pemeliharaan'])->name('aset_pemeliharaan.destroy_detail_pemeliharaan');
 
     // LAPORAN
     Route::get('/laporan/aset-masuk', [LaporanController::class, 'laporan_masuk'])->name('laporan.aset_masuk');

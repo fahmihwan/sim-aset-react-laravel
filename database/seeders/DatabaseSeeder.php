@@ -37,34 +37,34 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // hapus aja
-        // \App\Models\Kategori::create([
-        //     'kategori' => 'mebel'
-        // ]);
+        \App\Models\Kategori::create([
+            'kategori' => 'mebel'
+        ]);
 
-        // \App\Models\Aset::create([
-        //     'nama' => 'meja',
-        //     'kategori_id' => 1
-        // ]);
-        // \App\Models\Ruangan::create([
-        //     'ruangan' => 'kelas 7A',
-        // ]);
-        // \App\Models\Ruangan::create([
-        //     'ruangan' => 'kelas 7B',
-        // ]);
-        // \App\Models\Ruangan::create([
-        //     'ruangan' => 'Gudang',
-        // ]);
-        // \App\Models\Gudang::create([
-        //     'ruangan_id' => 3,
-        // ]);
-        // \App\Models\Aset_masuk::create([
-        //     'kode_masuk' => '#AST230523051513',
-        //     'user_id' => 2,
-        //     'keterangan' => 'data dari pemkab',
-        //     'penerima' => 'budi gunawan',
-        //     'verifikasi' => false,
-        //     'tanggal_masuk' => date('Y-m-d'),
-        // ]);
+        \App\Models\Aset::create([
+            'nama' => 'meja',
+            'kategori_id' => 1
+        ]);
+        \App\Models\Ruangan::create([
+            'ruangan' => 'kelas 7A',
+        ]);
+        \App\Models\Ruangan::create([
+            'ruangan' => 'kelas 7B',
+        ]);
+        \App\Models\Ruangan::create([
+            'ruangan' => 'Gudang',
+        ]);
+        \App\Models\Gudang::create([
+            'ruangan_id' => 3,
+        ]);
+        \App\Models\Aset_masuk::create([
+            'kode_masuk' => '#AST230523051513',
+            'user_id' => 2,
+            'keterangan' => 'di terima oleh tejo',
+            'asal_aset' => 'pemkab',
+            'verifikasi' => false,
+            'tanggal_masuk' => date('Y-m-d'),
+        ]);
 
 
 

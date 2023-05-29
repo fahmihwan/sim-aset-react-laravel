@@ -90,19 +90,6 @@ class DetailAsetController extends Controller
 
 
 
-        // try {
-
-
-
-        //     }
-
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        //     dd($th->getMessage());
-        // }
-
-
-
         return redirect()->back()->with([
             'type' => 'fail',
             'message' => 'User has been updated'

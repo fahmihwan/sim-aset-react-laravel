@@ -182,7 +182,7 @@ const InfoPenghapusan = ({ count }) => {
                     ></path>
                 </svg>
             </div>
-            <div className="stat-title">New Penghpausan</div>
+            <div className="stat-title">Penghpausan</div>
             <div className="stat-value">{count}</div>
             {/* <div className="stat-desc">↘︎ 90 (14%)</div> */}
         </div>

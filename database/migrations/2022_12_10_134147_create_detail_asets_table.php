@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Aset::class);
             $table->foreignIdFor(Ruangan::class);
             $table->foreignIdFor(Aset_masuk::class);
+            // $table->enum('kondisi', ['bagus', 'hilang', 'rusak']);
             $table->softDeletes();
             $table->timestamps();
         });

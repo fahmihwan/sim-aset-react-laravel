@@ -33,7 +33,7 @@ class AsetMasukController extends Controller
      */
     public function create()
     {
-        $kode = '#AST' .  Carbon::now()->format('dmyHis');
+        $kode = '#PM' .  Carbon::now()->format('dmyHis');
         return Inertia::render('Aset_masuk/Create', [
             'kode' => $kode
         ]);

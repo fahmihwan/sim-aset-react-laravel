@@ -5,8 +5,6 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/inertia-react";
 
-import { Popover } from "@headlessui/react";
-
 export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -141,7 +139,14 @@ export default function Authenticated({ auth, header, children }) {
                                                     "aset_penghapusan.index"
                                                 )}
                                             >
-                                                Aset Dihapuskan
+                                                Aset Penghapusan
+                                            </Dropdown.Link>
+                                            <Dropdown.Link
+                                                href={route(
+                                                    "aset_pemeliharaan.index"
+                                                )}
+                                            >
+                                                Aset Pemeliharaan
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>

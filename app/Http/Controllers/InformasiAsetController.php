@@ -38,8 +38,6 @@ class InformasiAsetController extends Controller
             'aset_masuk:id,tanggal_masuk'
         ])->paginate(5);
 
-
-
         return Inertia::render('Informasi_aset/Aset_dihapuskan', [
             'detail_asets' => $detail_asets
         ]);

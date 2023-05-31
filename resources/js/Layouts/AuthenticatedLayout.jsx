@@ -87,7 +87,7 @@ export default function Authenticated({ auth, header, children }) {
                                                 "informasi_aset.list_kelas"
                                             )}
                                         >
-                                            Aset Kelas
+                                            Aset per-ruangan
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route("informasi_aset.index")}

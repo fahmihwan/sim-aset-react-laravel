@@ -2,8 +2,26 @@ import DangerButton from "@/Components/DangerButton";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/inertia-react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 
 export default function Index(props) {
+   const[search, setSerach]= useState('');
+   const[data, setDatas]= useState([]);
+
+
+    useEffect(()=>{
+
+            axios.post('/get_search_aset_saatini/',{
+                search: search,
+            })
+            .then((res) => {
+                setDatas(res.data)
+            });
+        
+    },[search])
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -18,13 +36,23 @@ export default function Index(props) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <input
+                type="text"
+                value={search}
+                className={
+                    `border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mb-3` }
+                placeholder="cari kode / aset"
+
+                onChange={(e) => setSerach(e.target.value)}
+            />
+
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="overflow-x-auto">
                             <table className="table w-full">
                                 <thead>
                                     <tr>
                                         <th className="bg-neutral text-white">
-                                            No
+                                            No 
                                         </th>
                                         <th className="bg-neutral text-white">
                                             kode aset
@@ -33,7 +61,10 @@ export default function Index(props) {
                                             ruangan
                                         </th>
                                         <th className="bg-neutral text-white">
-                                            detail aset
+                                            Nama aset
+                                        </th>
+                                        <th className="bg-neutral text-white">
+                                            Kondisi
                                         </th>
                                         <th className="bg-neutral text-white">
                                             kategori
@@ -47,41 +78,43 @@ export default function Index(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.detail_asets.data.map((data, i) => {
-                                        // console.log(data);
+                                    {data?.data?.map((d, i) => {
+
+                                        // console.log(d);
                                         return (
                                             <tr key={i}>
                                                 <th>
-                                                    {props.detail_asets.from +
+                                                    {data.from +
                                                         i}
                                                 </th>
-                                                <td>{data.kode_detail_aset}</td>
-                                                <td>{data.ruangan.ruangan}</td>
-                                                <td>{data.aset.nama}</td>
+                                                <td>{d.kode_detail_aset}</td>
+                                                <td>{d.ruangan.ruangan}</td>
+                                                <td>{d.aset.nama}</td>
+                                                <td>{d.kondisi}</td>
                                                 <td>
                                                     {
-                                                        data.aset.kategori
+                                                        d.aset.kategori
                                                             .kategori
                                                     }
                                                 </td>
                                                 <td>
                                                     {
-                                                        data.aset_masuk
+                                                        d.aset_masuk
                                                             .tanggal_masuk
                                                     }
                                                 </td>
-                                                <td>{data.updated_at}</td>
+                                                <td>{d.updated_at}</td>
                                             </tr>
                                         );
                                     })}
                                 </tbody>
                             </table>
 
-                            <Pagination
-                                totals={props.detail_asets.total}
+                            {/* <Pagination
+                                totals={data?.total}
                                 className="mt-2"
-                                links={props.detail_asets.links}
-                            />
+                                links={data?.links}
+                            /> */}
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aset_mutasi;
 use App\Models\Detail_aset_mutasi;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,14 @@ class DetailAsetMutasiController extends Controller
      */
     public function destroy(Detail_aset_mutasi $detail_aset_mutasi)
     {
-        Detail_aset_mutasi::destroy($detail_aset_mutasi->id);
+
+
+        if (Aset_mutasi::where('id', $detail_aset_mutasi->aset_mutasi_id)->first()->verifikasi == 0) {
+            Detail_aset_mutasi::destroy($detail_aset_mutasi->id);
+        } else {
+            return redirect()->back()->with('message', 'data yang sudah terverifikasi tidak dapat dihapus');
+        }
+
         return redirect()->back();
     }
 }

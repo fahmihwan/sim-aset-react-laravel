@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aset_penghapusan;
 use App\Models\Detail_aset;
 use App\Models\Detail_aset_penghapusan;
 use Illuminate\Http\Request;
@@ -48,7 +49,11 @@ class DetailAsetPenghapusanController extends Controller
      */
     public function destroy(Detail_aset_penghapusan $detail_aset_penghapusan)
     {
-        Detail_aset_penghapusan::destroy($detail_aset_penghapusan->id);
-        return redirect()->back();
+
+        if (Aset_penghapusan::where('id', $detail_aset_penghapusan->aset_penghapusan_id)->first()->verifikasi == 0) {
+            Detail_aset_penghapusan::destroy($detail_aset_penghapusan->id);
+        } else {
+            return redirect()->back()->with('message', 'data yang sudah terverifikasi tidak dapat dihapus');
+        }
     }
 }

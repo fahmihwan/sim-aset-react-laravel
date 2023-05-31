@@ -42,6 +42,9 @@ export default function Show(props) {
                                             Aset
                                         </th>
                                         <th className="bg-neutral text-white">
+                                            Kondisi
+                                        </th>
+                                        <th className="bg-neutral text-white">
                                             ruangan
                                         </th>
                                         <th className="bg-neutral text-white">
@@ -59,6 +62,7 @@ export default function Show(props) {
                                                 <td>{i + 1}</td>
                                                 <td>{data.kode_detail_aset}</td>
                                                 <td>{data.aset.nama}</td>
+                                                <td>{data.kondisi}</td>
                                                 <td>{data.ruangan.ruangan}</td>
                                                 <td>
                                                     {data.aset_masuk.keterangan}

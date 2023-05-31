@@ -107,8 +107,10 @@ class DetailAsetController extends Controller
      */
     public function destroy(Detail_aset $detail_aset)
     {
-
-        Detail_aset::where('id', $detail_aset->id)->forceDelete();
-        return redirect()->back();
+        if (Aset_masuk::where('id', $detail_aset->aset_masuk_id)->first()->verifikasi == 0) {
+            Detail_aset::where('id', $detail_aset->id)->forceDelete();
+        } else {
+            return redirect()->back()->with('message', 'data yang sudah terverifikasi tidak dapat dihapus');
+        }
     }
 }

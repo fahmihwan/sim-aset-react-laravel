@@ -128,6 +128,7 @@ export default function Create(props) {
                             handleChooseKode={handleChooseKode}
                             setData={setData}
                             data={data}
+                            flash={flash}
                         />
                     )}
 
@@ -207,6 +208,7 @@ const FormAsetMutasi = ({
     setData,
     data,
     detail_aset_mutasi,
+    flash,
 }) => {
     return (
         <div className="bg-white w-full md:w-2/6 shadow-sm sm:rounded-lg m-2">
@@ -333,6 +335,29 @@ const FormAsetMutasi = ({
                     </div>
                     <PrimaryButton type="submit">Submit</PrimaryButton>
                 </form>
+
+                {flash?.message !== null ? (
+                    <div className="alert alert-error shadow-lg mt-5">
+                        <div>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="stroke-current flex-shrink-0 h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <span>{flash?.message}</span>
+                        </div>
+                    </div>
+                ) : (
+                    false
+                )}
             </div>
         </div>
     );

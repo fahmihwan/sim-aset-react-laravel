@@ -48,6 +48,8 @@ Route::middleware('auth', 'verified')->group(function () {
 
     // informasi aset
     Route::get('/informasi-aset/list', [InformasiAsetController::class, 'index'])->name('informasi_aset.index');
+    Route::post('/get_search_aset_saatini', [InformasiAsetController::class, 'get_search_aset_saatini']);
+
     Route::get('/informasi-aset/list-kelas', [InformasiAsetController::class, 'list_kelas'])->name('informasi_aset.list_kelas');
     Route::get('/informasi-aset/{id}/list-kelas', [InformasiAsetController::class, 'show'])->name('informasi_aset.show');
     Route::get('/informasi-aset/aset_dihapuskan', [InformasiAsetController::class, 'aset_dihapuskan'])->name('informasi_aset.aset_dihapuskan');

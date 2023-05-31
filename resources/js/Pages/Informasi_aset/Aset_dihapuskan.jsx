@@ -33,7 +33,10 @@ export default function Aset_dihapuskan(props) {
                                             ruangan
                                         </th>
                                         <th className="bg-neutral text-white">
-                                            detail aset
+                                            kondisi
+                                        </th>
+                                        <th className="bg-neutral text-white">
+                                            nama aset
                                         </th>
                                         <th className="bg-neutral text-white">
                                             kategori
@@ -56,6 +59,7 @@ export default function Aset_dihapuskan(props) {
                                                 </th>
                                                 <td>{data.kode_detail_aset}</td>
                                                 <td>{data.ruangan.ruangan}</td>
+                                                <td>{data.kondisi}</td>
                                                 <td>{data.aset.nama}</td>
                                                 <td>
                                                     {

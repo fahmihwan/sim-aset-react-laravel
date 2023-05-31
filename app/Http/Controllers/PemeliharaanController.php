@@ -17,18 +17,6 @@ class PemeliharaanController extends Controller
 {
     public function index()
     {
-        // return Detail_aset::select(['detail_asets.id', 'detail_aset_pemeliharaans.kondisi', 'kode_detail_aset', 'asets.nama', 'ruangans.ruangan'])
-        //     ->leftJoin('detail_aset_pemeliharaans', 'detail_asets.id', '=', 'detail_aset_pemeliharaans.detail_aset_id')
-        //     ->join('asets', 'detail_asets.aset_id', '=', 'asets.id')
-        //     ->join('ruangans', 'detail_asets.ruangan_id', '=', 'ruangans.id')
-        //     ->where('detail_aset_pemeliharaans.id', '!=', null)
-        //     ->groupBy('detail_asets.id')
-        //     ->where('detail_asets.id', 3)
-        //     ->get();
-        // return Detail_aset::with('detail_aset_pemeliharaans')->where('detail_aset_pemeliharaans', null)->get();
-        // return Detail_aset::with('detail_aset_pemeliharaans')->where(function ($q) {
-        //     return $q->whereNotNull('detail_aset_pemeliharaans');
-        // })->get();
         return Inertia::render('Aset_pemeliharaan/Index', [
             'aset_pemeliharaan' =>  Aset_pemeliharaan::latest()->paginate(5)
         ]);
@@ -108,8 +96,12 @@ class PemeliharaanController extends Controller
 
     public function destroy_detail_pemeliharaan($id)
     {
-        Detail_aset_pemeliharaan::destroy($id);
-        return redirect()->back();
+        $aset_pemeliharaan_id = Detail_aset_pemeliharaan::where('id', $id)->first()->aset_pemeliharaan_id;
+        if (Aset_pemeliharaan::where('id', $aset_pemeliharaan_id)->first()->verifikasi == 0) {
+            Detail_aset_pemeliharaan::destroy($id);
+        } else {
+            return redirect()->back()->with('message', 'data yang sudah terverifikasi tidak dapat dihapus');
+        }
     }
 
     public function update(Request $request, $id)
@@ -132,24 +124,23 @@ class PemeliharaanController extends Controller
             // detail aset
             foreach ($detail_aset_pemeliharaans as $d) {
                 // update detail aset
-
+                $arr[] = $d;
                 if ($request->verifikasi) {
                     Detail_aset_mutasi::where('detail_aset_id', $d->detail_aset_id)->update([
                         'kondisi' => $d->kondisi
                     ]);
-                    Detail_aset::where('id', $d->id)->update([
+                    Detail_aset::where('id', $d->detail_aset_id)->update([
                         'kondisi' => $d->kondisi
                     ]);
                 } else {
-                    Detail_aset_mutasi::where('id', $d->detail_aset_id)->update([
+                    Detail_aset_mutasi::where('detail_aset_id', $d->detail_aset_id)->update([
                         'kondisi' => 'bagus'
                     ]);
-                    Detail_aset::where('id', $d->id)->update([
+                    Detail_aset::where('id', $d->detail_aset_id)->update([
                         'kondisi' => 'bagus'
                     ]);
                 }
             }
-
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -157,8 +148,6 @@ class PemeliharaanController extends Controller
             DB::rollBack();
             dd($th->getMessage());
         }
-
-
 
 
         return redirect()->back();

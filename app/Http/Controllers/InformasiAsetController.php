@@ -16,11 +16,10 @@ class InformasiAsetController extends Controller
             'aset.kategori:id,kategori',
             'ruangan',
             'aset_masuk:id,tanggal_masuk'
-        ])->paginate(5);
+        ])->paginate(50);
 
-        return Inertia::render('Informasi_aset/Index', [
-            'detail_asets' => $detail_asets
-        ]);
+
+        return Inertia::render('Informasi_aset/Index');
     }
     public function list_kelas()
     {
@@ -37,6 +36,7 @@ class InformasiAsetController extends Controller
             'ruangan',
             'aset_masuk:id,tanggal_masuk'
         ])->paginate(5);
+
 
         return Inertia::render('Informasi_aset/Aset_dihapuskan', [
             'detail_asets' => $detail_asets
@@ -58,5 +58,21 @@ class InformasiAsetController extends Controller
             'detail_asets' => $detail_aset,
             'ruangan' => Ruangan::find($id)
         ]);
+    }
+
+    public function get_search_aset_saatini(Request $request)
+    {
+        $detail_asets = Detail_aset::with([
+            'aset:id,nama,kategori_id',
+            'aset.kategori:id,kategori',
+            'ruangan',
+            'aset_masuk:id,tanggal_masuk'
+        ])->whereHas('aset', function ($q) use ($request) {
+            $q->where("nama", 'LIKE', '%' . $request['search'] . '%');
+        })
+            ->orWhere('kode_detail_aset', 'LIKE', '%' . $request['search'] . '%')
+            ->paginate(50);
+
+        return $detail_asets;
     }
 }

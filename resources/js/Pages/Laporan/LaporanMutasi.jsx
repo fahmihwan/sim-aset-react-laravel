@@ -48,48 +48,60 @@ const LaporanMutasi = (props) => {
         >
             <Head title="Aset Masuk" />
 
-            <div className="pt-5 px-8  flex justify-between">
-                <form onSubmit={(e) => e.preventDefault()} className="flex">
-                    <div className="mr-3">
-                        <InputLabel forInput="start_date" value="start date" />
-                        <input
-                            type="date"
-                            name="start_date"
-                            value={data.start_date}
-                            onChange={handleChange}
-                            placeholder="Type here"
-                            className="input input-bordered w-full max-w-xs"
-                        />
-                    </div>
-                    <div className="mr-3">
-                        <InputLabel forInput="end_date" value="end date" />
-                        <input
-                            type="date"
-                            name="end_date"
-                            value={data.end_date}
-                            onChange={handleChange}
-                            placeholder="Type here"
-                            className="input input-bordered w-full max-w-xs"
-                        />
-                    </div>
-                    <div className="flex items-end mr-3">
-                        <button
-                            onClick={sendSearch}
-                            className="btn btn-primary"
-                        >
-                            Cari
-                        </button>
-                    </div>
-                    <div className="flex items-end">
-                        <button onClick={sendPrint} className="btn btn-primary">
-                            Print
-                        </button>
-                    </div>
-                </form>
-            </div>
-
             <div className="py-5">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="mb-5">
+                        <form
+                            onSubmit={(e) => e.preventDefault()}
+                            className="flex"
+                        >
+                            <div className="mr-3">
+                                <InputLabel
+                                    forInput="start_date"
+                                    value="start date"
+                                />
+                                <input
+                                    type="date"
+                                    name="start_date"
+                                    value={data.start_date}
+                                    onChange={handleChange}
+                                    placeholder="Type here"
+                                    className="input input-bordered w-full max-w-xs"
+                                />
+                            </div>
+                            <div className="mr-3">
+                                <InputLabel
+                                    forInput="end_date"
+                                    value="end date"
+                                />
+                                <input
+                                    type="date"
+                                    name="end_date"
+                                    value={data.end_date}
+                                    onChange={handleChange}
+                                    placeholder="Type here"
+                                    className="input input-bordered w-full max-w-xs"
+                                />
+                            </div>
+                            <div className="flex items-end mr-3">
+                                <button
+                                    onClick={sendSearch}
+                                    className="btn btn-primary"
+                                >
+                                    Cari
+                                </button>
+                            </div>
+                            <div className="flex items-end">
+                                <button
+                                    onClick={sendPrint}
+                                    className="btn btn-primary"
+                                >
+                                    Print
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-10">
                         <div className="overflow-x-auto">
                             <table className=" table table-compact w-full">

@@ -5,31 +5,32 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, usePage } from "@inertiajs/inertia-react";
 import { ExportBlob } from "./ExportBlob";
 
-const LaporanMasuk = (props) => {
-    const { errors, flash } = usePage().props;
-    const { data, setData, get, post } = useForm({
+const LaporanPemeliharaan = (props) => {
+    const { errors } = usePage().props;
+
+    const { data, setData, get, reset } = useForm({
         start_date: props.start_date || "",
         end_date: props.end_date || "",
     });
+
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value);
+    };
 
     const sendPrint = () => {
         data.start_date &&
             data.end_date &&
             ExportBlob(
-                `/laporan/export_pdf_masuk?start_date=${data.start_date}&end_date=${data.end_date}`,
-                "laporan_masuk.pdf"
+                `/laporan/export_pdf_pemeliharaan?start_date=${data.start_date}&end_date=${data.end_date}`,
+                "laporan_pemeliharaan.pdf"
             );
     };
 
     const sendDetailPrint = (id) => {
         ExportBlob(
-            `/laporan/export_detail_masuk?id=${id}`,
-            "laporan_detail_masuk.pdf"
+            `/laporan/export_detail_pemeliharaan?id=${id}`,
+            "laporan_detail_pemeliharaan.pdf"
         );
-    };
-
-    const handleChange = (e) => {
-        setData(e.target.name, e.target.value);
     };
 
     const sendSearch = () => {
@@ -42,7 +43,7 @@ const LaporanMasuk = (props) => {
             errors={props.errors}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Laporan Aset Masuk
+                    Laporan Aset pemeliharaan
                 </h2>
             }
         >
@@ -53,7 +54,6 @@ const LaporanMasuk = (props) => {
                     <div className="mb-5">
                         <form
                             onSubmit={(e) => e.preventDefault()}
-                            action=""
                             className="flex"
                         >
                             <div className="mr-3">
@@ -64,11 +64,11 @@ const LaporanMasuk = (props) => {
                                 <input
                                     type="date"
                                     name="start_date"
-                                    placeholder="Type here"
-                                    className="input input-bordered w-full max-w-xs"
                                     onChange={handleChange}
                                     value={data.start_date}
+                                    placeholder="Type here"
                                     required
+                                    className="input input-bordered w-full max-w-xs"
                                 />
                             </div>
                             <div className="mr-3">
@@ -79,26 +79,24 @@ const LaporanMasuk = (props) => {
                                 <input
                                     type="date"
                                     name="end_date"
-                                    placeholder="Type here"
-                                    className="input input-bordered w-full max-w-xs"
                                     onChange={handleChange}
                                     value={data.end_date}
                                     required
+                                    placeholder="Type here"
+                                    className="input input-bordered w-full max-w-xs"
                                 />
                             </div>
                             <div className="flex items-end mr-3">
                                 <button
                                     onClick={sendSearch}
-                                    className="btn btn-primary"
-                                    value="cari"
+                                    className="btn  btn-primary"
                                 >
                                     Cari
                                 </button>
                             </div>
-                            <div className="flex items-end">
+                            <div className="flex items-end mr-3">
                                 <button
                                     onClick={sendPrint}
-                                    value="print"
                                     className="btn btn-primary"
                                 >
                                     Print
@@ -106,6 +104,7 @@ const LaporanMasuk = (props) => {
                             </div>
                         </form>
                     </div>
+
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-10">
                         <div className="overflow-x-auto">
                             <table className=" table table-compact w-full">
@@ -115,7 +114,7 @@ const LaporanMasuk = (props) => {
                                             No
                                         </th>
                                         <th className="bg-neutral text-white">
-                                            Tanggal Aset Masuk
+                                            Tanggal
                                         </th>
                                         <th className="bg-neutral text-white">
                                             Kode
@@ -140,10 +139,10 @@ const LaporanMasuk = (props) => {
                                             <tr key={i} className="p-0 ">
                                                 <th>{i + 1}</th>
                                                 <td className="p-0 ">
-                                                    {data.tanggal_masuk}
+                                                    {data.tanggal_pemeliharaan}
                                                 </td>
                                                 <td className="p-0">
-                                                    {data.kode_masuk}
+                                                    {data.kode_pemeliharaan}
                                                 </td>
                                                 <td className="p-0">
                                                     {data.verifikasi ? (
@@ -167,11 +166,11 @@ const LaporanMasuk = (props) => {
                                                                 <td>kode</td>
                                                                 <td>aset</td>
                                                                 <td>ruangan</td>
+                                                                <td>kondisi</td>
                                                             </tr>
                                                         </thead>
-
                                                         <tbody>
-                                                            {data.detail_asets.map(
+                                                            {data.detail_aset_pemeliharaans.map(
                                                                 (d, i) => {
                                                                     return (
                                                                         <tr
@@ -186,12 +185,15 @@ const LaporanMasuk = (props) => {
                                                                             </th>
                                                                             <td className="p-1 ">
                                                                                 {
-                                                                                    d.kode_detail_aset
+                                                                                    d
+                                                                                        .detail_aset
+                                                                                        .kode_detail_aset
                                                                                 }
                                                                             </td>
                                                                             <td className="p-1 ">
                                                                                 {
                                                                                     d
+                                                                                        .detail_aset
                                                                                         .aset
                                                                                         .nama
                                                                                 }
@@ -199,8 +201,14 @@ const LaporanMasuk = (props) => {
                                                                             <td className="p-1 ">
                                                                                 {
                                                                                     d
+                                                                                        .detail_aset
                                                                                         .ruangan
                                                                                         .ruangan
+                                                                                }
+                                                                            </td>
+                                                                            <td className="p-1 ">
+                                                                                {
+                                                                                    d.kondisi
                                                                                 }
                                                                             </td>
                                                                         </tr>
@@ -226,24 +234,24 @@ const LaporanMasuk = (props) => {
                                         );
                                     })}
 
-                                    {props.data.data.length == 0 && (
+                                    {/* {props.data.data.length == 0 && (
                                         <tr>
                                             <td
                                                 colSpan={7}
                                                 className="text-center"
                                             >
-                                                Data Tidak Ditemukan
+                                                Data Belum Ada
                                             </td>
                                         </tr>
-                                    )}
+                                    )} */}
                                 </tbody>
                             </table>
 
-                            <Pagination
+                            {/* <Pagination
                                 totals={props.data.total}
                                 className="mt-2"
                                 links={props.data.links}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>
@@ -252,4 +260,4 @@ const LaporanMasuk = (props) => {
     );
 };
 
-export default LaporanMasuk;
+export default LaporanPemeliharaan;

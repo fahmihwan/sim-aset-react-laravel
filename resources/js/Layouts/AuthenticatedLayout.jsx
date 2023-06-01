@@ -190,6 +190,13 @@ export default function Authenticated({ auth, header, children }) {
                                             >
                                                 Aset Dihapuskan
                                             </Dropdown.Link>
+                                            <Dropdown.Link
+                                                href={route(
+                                                    "laporan.aset_pemeliharaan"
+                                                )}
+                                            >
+                                                Aset Pemeliharaan
+                                            </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 )}

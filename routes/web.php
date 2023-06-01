@@ -18,9 +18,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PemeliharaanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,16 +77,19 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/laporan/aset-masuk', [LaporanController::class, 'laporan_masuk'])->name('laporan.aset_masuk');
     Route::get('/laporan/aset-mutasi', [LaporanController::class, 'laporan_mutasi'])->name('laporan.aset_mutasi');
     Route::get('/laporan/aset-dihapuskan', [LaporanController::class, 'laporan_dihapuskan'])->name('laporan.aset_dihapuskan');
+    Route::get('/laporan/aset-pemeliharaan', [LaporanController::class, 'laporan_pemeliharaan'])->name('laporan.aset_pemeliharaan');
 
     // pdf
     Route::get('/laporan/export_pdf_masuk', [PdfController::class, 'export_pdf_masuk']);
     Route::get('/laporan/export_pdf_mutasi', [PdfController::class, 'export_pdf_mutasi']);
     Route::get('/laporan/export_pdf_penghapusan', [PdfController::class, 'export_pdf_penghapusan']);
+    Route::get('/laporan/export_pdf_pemeliharaan', [PdfController::class, 'export_pdf_pemeliharaans']);
 
     // pdf
     Route::get('/laporan/export_detail_masuk', [PdfController::class, 'export_detail_masuk']);
     Route::get('/laporan/export_detail_mutasi', [PdfController::class, 'export_detail_mutasi']);
     Route::get('/laporan/export_detail_penghapusan', [PdfController::class, 'export_detail_penghapusan']);
+    Route::get('/laporan/export_detail_pemeliharaan', [PdfController::class, 'export_detail_pemeliharaans']);
 
     Route::get('/account', [RegisteredUserController::class, 'index_account_dashboard'])->name('account.index');
     Route::get('/account/create', [RegisteredUserController::class, 'create_account_dashboard'])->name('account.create');

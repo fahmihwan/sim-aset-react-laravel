@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Aset_masuk;
 use App\Models\Aset_mutasi;
+use App\Models\Aset_pemeliharaan;
 use App\Models\Aset_penghapusan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -90,6 +91,36 @@ class LaporanController extends Controller
         }
 
         return Inertia::render('Laporan/LaporanPenghapusan', [
+            'data' => $data,
+            'start_date' => request('start_date'),
+            'end_date' => request('end_date')
+        ]);
+    }
+    public function laporan_pemeliharaan()
+    {
+        $data =  Aset_pemeliharaan::with([
+            'detail_aset_pemeliharaans',
+            'detail_aset_pemeliharaans.detail_aset.ruangan:id,ruangan',
+            'detail_aset_pemeliharaans.detail_aset.aset:id,nama'
+        ])->paginate(5);
+
+
+        if (request('start_date')) {
+            $data =  Aset_pemeliharaan::with([
+                'detail_aset_pemeliharaans',
+                'detail_aset_pemeliharaans.detail_aset.ruangan:id,ruangan',
+                'detail_aset_pemeliharaans.detail_aset.aset:id,nama'
+            ])
+                ->whereBetween('aset_pemeliharaans.tanggal_pemeliharaan', [request('start_date'), request('end_date')])
+                ->paginate(5);
+        }
+
+        // return view('pdf.laporan_pemeliharaan', [
+        //     'data' => $data,
+        //     'start_date' => request('start_date'),
+        //     'end_date' => request('end_date')
+        // ]);
+        return Inertia::render('Laporan/LaporanPemeliharaan', [
             'data' => $data,
             'start_date' => request('start_date'),
             'end_date' => request('end_date')

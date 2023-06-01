@@ -12,19 +12,6 @@ use Inertia\Inertia;
 class DetailAsetController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return Inertia::render('Detail_aset/Index', [
-            'detail_aset' => Aset_masuk::paginate(5)
-        ]);
-    }
-
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -53,13 +40,14 @@ class DetailAsetController extends Controller
             }
             return $data;
         }
-        // cek gudang 
-        $gudang = Gudang::select('ruangan_id')->first();
+
 
         // cek jika tanggal sekarang != kode
         // increment mulai dari 0
         // jika sama 
         // increment dari yg sebelumnya
+        // cek gudang 
+        $gudang = Gudang::select('ruangan_id')->first();
 
         if (Detail_aset::where('ruangan_id', $gudang->ruangan_id)->exists()) { //jika ada
             $last_detail_aset_id =  Detail_aset::select(["kode_detail_aset", "created_at"])
@@ -90,10 +78,9 @@ class DetailAsetController extends Controller
             ]);
         }
 
-
+        return redirect()->back();
 
         return redirect()->back()->with([
-            'type' => 'fail',
             'message' => 'User has been updated'
         ]);
     }

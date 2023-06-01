@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Aset_masuk;
 use App\Models\Detail_aset;
 use App\Models\Detail_aset_mutasi;
+use App\Models\Detail_aset_pemeliharaan;
 use App\Models\Detail_aset_penghapusan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -33,18 +34,30 @@ class DashboardController extends Controller
             ->groupBy(DB::raw('month(aset_penghapusans.tanggal_penghapusan)'))
             ->whereYear('aset_penghapusans.tanggal_penghapusan', Carbon::now()->format('Y'))
             ->get();
+        $detail_aset_pemeliharaan = Detail_aset_pemeliharaan::join('aset_pemeliharaans', 'detail_aset_pemeliharaans.aset_pemeliharaan_id', '=', 'aset_pemeliharaans.id')
+            ->join('detail_asets', 'detail_aset_pemeliharaans.detail_aset_id', '=', 'detail_asets.id')
+            ->select(DB::raw('count(aset_pemeliharaans.tanggal_pemeliharaan) as total, month(aset_pemeliharaans.tanggal_pemeliharaan) as bulan'))
+            ->groupBy(DB::raw('month(aset_pemeliharaans.tanggal_pemeliharaan)'))
+            ->whereYear('aset_pemeliharaans.tanggal_pemeliharaan', Carbon::now()->format('Y'))
+            ->get();
+
+
 
         $masuk = Detail_aset::whereYear('created_at', Carbon::now()->format('Y'))->count();
         $mutasi =  Detail_aset_mutasi::whereYear('created_at', Carbon::now()->format('Y'))->count();
         $penghapusan = Detail_aset_penghapusan::whereYear('created_at', Carbon::now()->format('Y'))->count();
+        $pemliharaan = Detail_aset_pemeliharaan::whereYear('created_at', Carbon::now()->format('Y'))->count();
+
 
         return Inertia::render('Dashboard', [
             'aset_masuk' => $aset_masuk,
             'detail_aset_mutasi' => $detail_aset_mutasi,
             'detail_aset_penghapusan' => $detail_aset_penghapusan,
+            'detail_aset_pemeliharaan' => $detail_aset_pemeliharaan,
             'masuk' => $masuk,
             'mutasi' => $mutasi,
-            'penghapusan' => $penghapusan
+            'penghapusan' => $penghapusan,
+            'pemeliharaan' => $pemliharaan
         ]);
     }
 }

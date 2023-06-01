@@ -5,12 +5,17 @@ import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 
 export default function Dashboard(props) {
-    const { aset_masuk, detail_aset_mutasi, detail_aset_penghapusan } =
-        usePage().props;
+    const {
+        aset_masuk,
+        detail_aset_mutasi,
+        detail_aset_penghapusan,
+        detail_aset_pemeliharaan,
+    } = usePage().props;
 
     let dataAsetMasuk = [];
     let dataAsetMutasi = [];
     let dataAsetPenghapusan = [];
+    let dataAsetPemeliharaan = [];
 
     for (let i = 0; i <= 11; i++) {
         dataAsetMasuk.push(0);
@@ -20,12 +25,14 @@ export default function Dashboard(props) {
     detail_aset_mutasi.forEach((e) => {
         dataAsetMutasi[e.bulan - 1] = e.total;
     });
-
     aset_masuk.forEach((e) => {
         dataAsetMasuk[e.bulan - 1] = e.total;
     });
     detail_aset_penghapusan.forEach((e) => {
         dataAsetPenghapusan[e.bulan - 1] = e.total;
+    });
+    detail_aset_pemeliharaan.forEach((e) => {
+        dataAsetPemeliharaan[e.bulan - 1] = e.total;
     });
 
     return (
@@ -47,6 +54,7 @@ export default function Dashboard(props) {
                         <InfoMasuk count={props.masuk} />
                         <InfoMutasi count={props.mutasi} />
                         <InfoPenghapusan count={props.penghapusan} />
+                        <InfoPemeliharaan count={props.pemeliharaan} />
                     </div>
                     {/* endstat */}
 
@@ -58,6 +66,7 @@ export default function Dashboard(props) {
                             dataAsetMasuk={dataAsetMasuk}
                             dataAsetMutasi={dataAsetMutasi}
                             dataAsetPenghapusan={dataAsetPenghapusan}
+                            dataAsetPemeliharaan={dataAsetPemeliharaan}
                         />
                     </div>
                 </div>
@@ -81,7 +90,12 @@ const labels = [
     "Desember",
 ];
 
-const LineChart = ({ dataAsetMasuk, dataAsetMutasi, dataAsetPenghapusan }) => {
+const LineChart = ({
+    dataAsetMasuk,
+    dataAsetMutasi,
+    dataAsetPenghapusan,
+    dataAsetPemeliharaan,
+}) => {
     return (
         <div>
             <Line
@@ -106,6 +120,12 @@ const LineChart = ({ dataAsetMasuk, dataAsetMutasi, dataAsetPenghapusan }) => {
                             borderColor: "rgb(255, 99, 132)",
                             data: dataAsetPenghapusan,
                         },
+                        {
+                            label: "Aset Pemeliharaan",
+                            backgroundColor: "rgb(99, 180, 255)",
+                            borderColor: "rgb(99, 180, 255)",
+                            data: dataAsetPemeliharaan,
+                        },
                     ],
                 }}
             />
@@ -117,20 +137,7 @@ const InfoMasuk = ({ count }) => {
     return (
         <div className="stat">
             <div className="stat-figure text-secondary">
-                {/* <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="inline-block w-8 h-8 stroke-current"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                </svg> */}
-                <i class="fa-solid fa-truck-ramp-box text-2xl"></i>
+                <i className="fa-solid fa-truck-ramp-box text-2xl"></i>
             </div>
             <div className="stat-title">Aset Masuk</div>
             <div className="stat-value">{count}</div>
@@ -158,6 +165,31 @@ const InfoMutasi = ({ count }) => {
                 </svg>
             </div>
             <div className="stat-title">Aset Keluar</div>
+            <div className="stat-value">{count}</div>
+            {/* <div className="stat-desc">↗︎ 400 (22%)</div> */}
+        </div>
+    );
+};
+
+const InfoPemeliharaan = ({ count }) => {
+    return (
+        <div className="stat">
+            <div className="stat-figure text-secondary">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block w-8 h-8 stroke-current"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                    ></path>
+                </svg>
+            </div>
+            <div className="stat-title">Aset Pemeliharaan</div>
             <div className="stat-value">{count}</div>
             {/* <div className="stat-desc">↗︎ 400 (22%)</div> */}
         </div>

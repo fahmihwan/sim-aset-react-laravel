@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Aset_masuk;
 use App\Models\Aset_mutasi;
+use App\Models\Aset_pemeliharaan;
 use App\Models\Aset_penghapusan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfController extends Controller
 {
-
     public function export_pdf_masuk()
     {
         $data = Aset_masuk::with([
@@ -24,7 +24,6 @@ class PdfController extends Controller
         if ($data->count() == 0) {
             return 0;
         }
-
         $pdf = Pdf::loadView('pdf.laporan_masuk', [
             'data' => $data,
             'start_date' => request('start_date'),
@@ -73,6 +72,7 @@ class PdfController extends Controller
             ->get();
 
 
+        return $data;
         if ($data->count() == 0) {
             return 0;
         }
@@ -82,7 +82,26 @@ class PdfController extends Controller
         //     'end_date' => request('end_date'),
         // ]);
 
-        $pdf = Pdf::loadView('pdf.laporan_penghapusan', [
+        // $pdf = Pdf::loadView('pdf.laporan_penghapusan', [
+        //     'data' => $data,
+        //     'start_date' => request('start_date'),
+        //     'end_date' => request('end_date'),
+        // ]);
+        // return $pdf->download('laporan.pdf');
+    }
+
+    public function export_pdf_pemeliharaans()
+    {
+        $data =  Aset_pemeliharaan::with([
+            'detail_aset_pemeliharaans',
+            'detail_aset_pemeliharaans.detail_aset.ruangan:id,ruangan',
+            'detail_aset_pemeliharaans.detail_aset.aset:id,nama'
+        ])
+            ->whereBetween('aset_pemeliharaans.tanggal_pemeliharaan', [request('start_date'), request('end_date')])
+            ->paginate(5);
+
+
+        $pdf = Pdf::loadView('pdf.laporan_pemeliharaan', [
             'data' => $data,
             'start_date' => request('start_date'),
             'end_date' => request('end_date'),
@@ -107,6 +126,7 @@ class PdfController extends Controller
         ]);
         return $pdf->download('laporan.pdf');
     }
+
     public function export_detail_mutasi()
     {
         $data = Aset_mutasi::with([
@@ -140,6 +160,32 @@ class PdfController extends Controller
             return 0;
         }
         $pdf = Pdf::loadView('pdf.penghapusan', [
+            'data' => $data,
+        ]);
+        return $pdf->download('laporan.pdf');
+    }
+    public function export_detail_pemeliharaans()
+    {
+        $data =  Aset_pemeliharaan::with([
+            'detail_aset_pemeliharaans',
+            'detail_aset_pemeliharaans.detail_aset.ruangan:id,ruangan',
+            'detail_aset_pemeliharaans.detail_aset.aset:id,nama'
+        ])
+            ->where('aset_pemeliharaans.id', request('id'))
+            ->first();
+        // return view('pdf.pemeliharaan', [
+        //     'data' => $data
+        // ]);
+        if ($data->count() == 0) {
+            return 0;
+        }
+
+        // return $data;
+        // return view('pdf.pemeliharaan', [
+        //     'data' => $data
+        // ]);
+
+        $pdf = Pdf::loadView('pdf.pemeliharaan', [
             'data' => $data,
         ]);
         return $pdf->download('laporan.pdf');
